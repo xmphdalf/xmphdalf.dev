@@ -165,7 +165,7 @@ export interface Project {
   /**
    * The user this project belongs to.
    */
-  user: number | User;
+  user?: (number | null) | User;
   title: string;
   year?: number | null;
   /**
@@ -224,7 +224,7 @@ export interface Credential {
   /**
    * The user this credential belongs to.
    */
-  user: number | User;
+  user?: (number | null) | User;
   /**
    * Short identifier shown on the badge. e.g. GCP, AWS
    */
@@ -263,7 +263,7 @@ export interface Profile {
   /**
    * The user this profile belongs to. One profile per user.
    */
-  user: number | User;
+  user?: (number | null) | User;
   /**
    * Profile photo/avatar. Square crops work best.
    */
@@ -392,7 +392,7 @@ export interface StackGroup {
   /**
    * The user this stack group belongs to.
    */
-  user: number | User;
+  user?: (number | null) | User;
   groupName: string;
   items?:
     | {
