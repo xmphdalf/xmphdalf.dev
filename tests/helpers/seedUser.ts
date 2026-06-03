@@ -25,7 +25,14 @@ export async function seedTestUser(): Promise<void> {
   // Create fresh test user
   await payload.create({
     collection: 'users',
-    data: { ...testUser, role: 'super-admin' },
+    data: {
+      email: testUser.email,
+      password: testUser.password,
+      name: 'Test User',
+      slug: 'test-user',
+      role: 'super-admin',
+    },
+    draft: false,
   })
 }
 

@@ -67,12 +67,12 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    tenants: Tenant;
     users: User;
     projects: Project;
     credentials: Credential;
     profiles: Profile;
     'stack-groups': StackGroup;
+    media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,12 +80,12 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    tenants: TenantsSelect<false> | TenantsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     credentials: CredentialsSelect<false> | CredentialsSelect<true>;
     profiles: ProfilesSelect<false> | ProfilesSelect<true>;
     'stack-groups': StackGroupsSelect<false> | StackGroupsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -127,37 +127,16 @@ export interface UserAuthOperations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tenants".
- */
-export interface Tenant {
-  id: number;
-  name: string;
-  /**
-   * Auto-generated from name. Subdomain — lowercase, no spaces.
-   */
-  slug: string;
-  theme: 'editorial';
-  /**
-   * Optional custom domain (e.g. mihirlathiya.com). Leave empty to use subdomain.
-   */
-  domain?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
   id: number;
-  name?: string | null;
-  role: 'super-admin' | 'tenant-admin';
-  tenants?:
-    | {
-        tenant: number | Tenant;
-        id?: string | null;
-      }[]
-    | null;
+  name: string;
+  /**
+   * Your portfolio URL. Auto-generated from name. Lowercase, numbers, hyphens only.
+   */
+  slug: string;
+  role: 'super-admin' | 'user';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -183,18 +162,36 @@ export interface User {
  */
 export interface Project {
   id: number;
-  tenant?: (number | null) | Tenant;
+  /**
+   * The user this project belongs to.
+   */
+  user: number | User;
   title: string;
   year?: number | null;
+  /**
+   * e.g. Web app, Mobile app, Design system
+   */
   kind?: string | null;
+  /**
+   * Your role. e.g. Solo developer, UI designer
+   */
   role?: string | null;
+  /**
+   * Technologies used in this project.
+   */
   stack?:
     | {
         name: string;
         id?: string | null;
       }[]
     | null;
+  /**
+   * One or two sentence overview.
+   */
   summary?: string | null;
+  /**
+   * Full case study paragraphs.
+   */
   body?:
     | {
         paragraph: string;
@@ -202,7 +199,7 @@ export interface Project {
       }[]
     | null;
   /**
-   * Key/value pairs shown in the sidebar (e.g. Scale → 1.2M passages).
+   * Key/value pairs shown in the sidebar. e.g. Scale → 1.2M passages.
    */
   meta?:
     | {
@@ -211,6 +208,9 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Lower numbers appear first.
+   */
   order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -221,25 +221,34 @@ export interface Project {
  */
 export interface Credential {
   id: number;
-  tenant?: (number | null) | Tenant;
   /**
-   * Short identifier shown on the badge, e.g. GCP.
+   * The user this credential belongs to.
+   */
+  user: number | User;
+  /**
+   * Short identifier shown on the badge. e.g. GCP, AWS
    */
   seal?: string | null;
   issuer: string;
   tier?: ('foundational' | 'associate' | 'professional' | 'expert' | 'specialty') | null;
   title: string;
   /**
-   * Abbreviation shown on the index, e.g. ACE.
+   * Abbreviation shown on the index. e.g. ACE, GCP-PCA
    */
   short?: string | null;
   description?: string | null;
   issued?: string | null;
   /**
-   * e.g. "3 years" or "Lifetime".
+   * e.g. "3 years" or "Lifetime"
    */
   validity?: string | null;
+  /**
+   * Credential ID or number
+   */
   credentialId?: string | null;
+  /**
+   * URL to verify this credential
+   */
   verifyUrl?: string | null;
   status?: ('active' | 'expired' | 'revoked') | null;
   updatedAt: string;
@@ -251,13 +260,23 @@ export interface Credential {
  */
 export interface Profile {
   id: number;
-  tenant?: (number | null) | Tenant;
+  /**
+   * The user this profile belongs to. One profile per user.
+   */
+  user: number | User;
+  /**
+   * Profile photo/avatar. Square crops work best.
+   */
+  photo?: (number | null) | Media;
   name: string;
   role?: string | null;
+  /**
+   * What you focus on. e.g. Full-stack development, Product design
+   */
   focus?: string | null;
   location?: string | null;
   /**
-   * Opening paragraphs shown on the home view.
+   * Opening paragraphs shown on the home page.
    */
   intro?:
     | {
@@ -279,7 +298,7 @@ export interface Profile {
       }[]
     | null;
   /**
-   * Key/value pairs in the About sidebar (e.g. Experience → 4+ years).
+   * Key/value pairs in the sidebar. e.g. Experience → 4+ years
    */
   facts?:
     | {
@@ -289,12 +308,15 @@ export interface Profile {
       }[]
     | null;
   /**
-   * Social / external links shown in the sidebar and Contact page.
+   * Social and external links shown in sidebar and Contact page.
    */
   links?:
     | {
         label: string;
         href: string;
+        /**
+         * Display text. e.g. @mihir
+         */
         handle?: string | null;
         id?: string | null;
       }[]
@@ -306,9 +328,60 @@ export interface Profile {
     label?: string | null;
     text?: string | null;
   };
+  /**
+   * Show "Open to work" badge on portfolio.
+   */
   openToWork?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Alt text for accessibility and SEO.
+   */
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    square?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    large?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -316,7 +389,10 @@ export interface Profile {
  */
 export interface StackGroup {
   id: number;
-  tenant?: (number | null) | Tenant;
+  /**
+   * The user this stack group belongs to.
+   */
+  user: number | User;
   groupName: string;
   items?:
     | {
@@ -353,10 +429,6 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'tenants';
-        value: number | Tenant;
-      } | null)
-    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -375,6 +447,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'stack-groups';
         value: number | StackGroup;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -420,29 +496,12 @@ export interface PayloadMigration {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tenants_select".
- */
-export interface TenantsSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  theme?: T;
-  domain?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  slug?: T;
   role?: T;
-  tenants?:
-    | T
-    | {
-        tenant?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -465,7 +524,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
-  tenant?: T;
+  user?: T;
   title?: T;
   year?: T;
   kind?: T;
@@ -499,7 +558,7 @@ export interface ProjectsSelect<T extends boolean = true> {
  * via the `definition` "credentials_select".
  */
 export interface CredentialsSelect<T extends boolean = true> {
-  tenant?: T;
+  user?: T;
   seal?: T;
   issuer?: T;
   tier?: T;
@@ -519,7 +578,8 @@ export interface CredentialsSelect<T extends boolean = true> {
  * via the `definition` "profiles_select".
  */
 export interface ProfilesSelect<T extends boolean = true> {
-  tenant?: T;
+  user?: T;
+  photo?: T;
   name?: T;
   role?: T;
   focus?: T;
@@ -567,7 +627,7 @@ export interface ProfilesSelect<T extends boolean = true> {
  * via the `definition` "stack-groups_select".
  */
 export interface StackGroupsSelect<T extends boolean = true> {
-  tenant?: T;
+  user?: T;
   groupName?: T;
   items?:
     | T
@@ -578,6 +638,58 @@ export interface StackGroupsSelect<T extends boolean = true> {
   order?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        square?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        large?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

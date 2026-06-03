@@ -6,8 +6,22 @@ export const StackGroups: CollectionConfig = {
     useAsTitle: 'groupName',
     defaultColumns: ['groupName', 'order'],
   },
+  access: {
+    read: () => true,
+    create: ({ req }) => !!req.user,
+    update: ({ req }) => !!req.user,
+    delete: ({ req }) => req.user?.role === 'super-admin',
+  },
   fields: [
-    // `tenant` relationship injected by multi-tenant plugin
+    {
+      name: 'user',
+      type: 'relationship',
+      relationTo: 'users',
+      required: true,
+      admin: {
+        description: 'The user this stack group belongs to.',
+      },
+    },
     { name: 'groupName', type: 'text', required: true },
     {
       name: 'items',

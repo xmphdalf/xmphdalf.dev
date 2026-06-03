@@ -1,0 +1,100 @@
+/* Contact page styles */
+
+.contact-layout {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.contact-header h1 {
+  margin-bottom: 0.5rem;
+}
+
+.contact-header p {
+  font-size: 1rem;
+}
+
+/* 
+ * Contact links - large, easy to tap
+ * Each link is a clear call to action
+ */
+.contact-links-section {
+  margin-bottom: 3rem;
+}
+
+.contact-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-link-item {
+  border: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.contact-link-item:hover {
+  border-color: var(--text-tertiary);
+}
+
+.contact-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.contact-link-label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.contact-link-handle {
+  font-size: 0.9375rem;
+}
+
+/* 
+ * Status section - what they are working on
+ */
+.contact-status-section {
+  margin-bottom: 2rem;
+}
+
+.contact-status-title {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+.contact-status-text {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* 
+ * Open to work badge
+ */
+.contact-open-to-work {
+  margin-top: 2rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 9999px;
+}
+
+.badge-success {
+  background: var(--success);
+  color: white;
+}

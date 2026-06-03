@@ -1,0 +1,117 @@
+/* About page specific styles */
+
+/* 
+ * Lead quote - the opening statement
+ * Large, prominent, feels like a magazine pull quote
+ */
+.lead-section {
+  margin-bottom: 4rem;
+}
+
+.lead-quote {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.75rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  border-left: 2px solid var(--border);
+  padding-left: 1.5rem;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .lead-quote {
+    font-size: 2rem;
+    padding-left: 2rem;
+  }
+}
+
+/* 
+ * Bio section - readable prose
+ * Max width for comfortable reading
+ */
+.bio-section {
+  margin-top: 3rem;
+}
+
+.bio-section .prose {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+
+/* 
+ * Sidebar styles - same as home page
+ * Keeping consistency across pages
+ */
+.about-sidebar {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .about-sidebar {
+    position: sticky;
+    top: 5rem;
+    height: fit-content;
+  }
+}
+
+.sidebar-section {
+  margin-bottom: 2.5rem;
+}
+
+.sidebar-section:last-child {
+  margin-bottom: 0;
+}
+
+.sidebar-title {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.facts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .fact-item {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.fact-key {
+  color: var(--text-tertiary);
+  font-size: 0.875rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.fact-value {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+}
+
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.link-item a {
+  font-size: 0.9375rem;
+}
+
+.link-item a:hover {
+  color: var(--accent);
+}

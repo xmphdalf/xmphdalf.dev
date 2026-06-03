@@ -1,0 +1,260 @@
+/* Global styles for the portfolio platform */
+
+/* 
+ * Color palette - kept minimal and neutral
+ * We want the content to breathe, not the UI
+ */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --text-primary: #111111;
+  --text-secondary: #444444;
+  --text-tertiary: #888888;
+  --border: #e5e5e5;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --success: #16a34a;
+  --error: #dc2626;
+}
+
+/* 
+ * Dark mode support - respects system preference
+ * No toggle, just let the OS decide
+ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #111111;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1a1;
+    --text-tertiary: #737373;
+    --border: #262626;
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --success: #22c55e;
+    --error: #ef4444;
+  }
+}
+
+/* 
+ * Base reset - minimal, just what we need
+ * No heavy reset libraries
+ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 
+ * Typography - system fonts for speed and clarity
+ * Using Georgia for body gives it that editorial feel
+ */
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  line-height: 1.7;
+}
+
+/* 
+ * Headings use system-ui for clean, modern contrast
+ * Tight line-heights keep them crisp
+ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* 
+ * Links - subtle underline on hover only
+ * No default underlines cluttering the text
+ */
+a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+a.link-underline:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 
+ * Prose typography - for body paragraphs
+ * Readable line length is key
+ */
+.prose {
+  max-width: 65ch;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.prose p {
+  margin-bottom: 1.5rem;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* 
+ * Layout utilities
+ */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+/* 
+ * Grid layouts
+ */
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .grid-2col {
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+  }
+}
+
+/* 
+ * Section spacing - consistent rhythm
+ */
+section {
+  margin-bottom: 4rem;
+}
+
+section:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  section {
+    margin-bottom: 6rem;
+  }
+}
+
+/* 
+ * Utility classes
+ */
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.font-sans {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* 
+ * Divider - subtle, not heavy
+ */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+/* 
+ * Lists - clean, minimal
+ */
+ul, ol {
+  list-style: none;
+}
+
+/* 
+ * Buttons and interactive elements
+ * Keep them simple, no heavy styling
+ */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+}
+
+button:hover {
+  color: var(--accent);
+}
+
+/* 
+ * Focus states - accessible but subtle
+ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 
+ * Page transitions - fade in on load
+ * Nothing flashy, just a gentle entrance
+ */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.page-load {
+  animation: fadeIn 0.4s ease-out;
+}

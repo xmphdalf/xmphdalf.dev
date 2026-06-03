@@ -1,4 +1,5 @@
-import React from 'react'
+import type React from 'react'
+import '@/styles/globals.css'
 
 export const metadata = {
   title: 'xmphdalf.dev',

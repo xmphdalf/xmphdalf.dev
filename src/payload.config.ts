@@ -1,16 +1,14 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { multiTenantPlugin } from '@payloadcms/plugin-multi-tenant'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-
-import { Tenants } from './collections/Tenants'
-import { Users } from './collections/Users'
-import { Projects } from './collections/Projects'
 import { Credentials } from './collections/Credentials'
+import { Media } from './collections/Media'
 import { Profiles } from './collections/Profiles'
+import { Projects } from './collections/Projects'
 import { StackGroups } from './collections/StackGroups'
+import { Users } from './collections/Users'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -29,7 +27,7 @@ export default buildConfig({
 
   editor: lexicalEditor(),
 
-  collections: [Tenants, Users, Projects, Credentials, Profiles, StackGroups],
+  collections: [Users, Projects, Credentials, Profiles, StackGroups, Media],
 
   db: postgresAdapter({
     pool: {
@@ -41,16 +39,5 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
 
-  plugins: [
-    multiTenantPlugin({
-      tenantsSlug: 'tenants',
-      collections: {
-        projects: {},
-        credentials: {},
-        profiles: { isGlobal: true },
-        'stack-groups': {},
-      },
-      userHasAccessToAllTenants: (user) => (user as { role?: string })?.role === 'super-admin',
-    }),
-  ],
+  plugins: [],
 })

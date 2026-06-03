@@ -2,221 +2,6 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.tenants": {
-      "name": "tenants",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "theme": {
-          "name": "theme",
-          "type": "enum_tenants_theme",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'editorial'"
-        },
-        "domain": {
-          "name": "domain",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp(3) with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "tenants_slug_idx": {
-          "name": "tenants_slug_idx",
-          "columns": [
-            {
-              "expression": "slug",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "tenants_updated_at_idx": {
-          "name": "tenants_updated_at_idx",
-          "columns": [
-            {
-              "expression": "updated_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "tenants_created_at_idx": {
-          "name": "tenants_created_at_idx",
-          "columns": [
-            {
-              "expression": "created_at",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.users_tenants": {
-      "name": "users_tenants",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "tenant_id": {
-          "name": "tenant_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {
-        "users_tenants_order_idx": {
-          "name": "users_tenants_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "users_tenants_parent_id_idx": {
-          "name": "users_tenants_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "users_tenants_tenant_idx": {
-          "name": "users_tenants_tenant_idx",
-          "columns": [
-            {
-              "expression": "tenant_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "users_tenants_tenant_id_tenants_id_fk": {
-          "name": "users_tenants_tenant_id_tenants_id_fk",
-          "tableFrom": "users_tenants",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "set null",
-          "onUpdate": "no action"
-        },
-        "users_tenants_parent_id_fk": {
-          "name": "users_tenants_parent_id_fk",
-          "tableFrom": "users_tenants",
-          "tableTo": "users",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.users_sessions": {
       "name": "users_sessions",
       "schema": "",
@@ -289,12 +74,8 @@
           "name": "users_sessions_parent_id_fk",
           "tableFrom": "users_sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -319,7 +100,13 @@
           "name": "name",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
         },
         "role": {
           "name": "role",
@@ -327,7 +114,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'tenant-admin'"
+          "default": "'user'"
         },
         "updated_at": {
           "name": "updated_at",
@@ -388,6 +175,21 @@
         }
       },
       "indexes": {
+        "users_slug_idx": {
+          "name": "users_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "users_updated_at_idx": {
           "name": "users_updated_at_idx",
           "columns": [
@@ -507,12 +309,8 @@
           "name": "projects_stack_parent_id_fk",
           "tableFrom": "projects_stack",
           "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -589,12 +387,8 @@
           "name": "projects_body_parent_id_fk",
           "tableFrom": "projects_body",
           "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -677,12 +471,8 @@
           "name": "projects_meta_parent_id_fk",
           "tableFrom": "projects_meta",
           "tableTo": "projects",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -703,11 +493,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "tenant_id": {
-          "name": "tenant_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "title": {
           "name": "title",
@@ -762,11 +552,11 @@
         }
       },
       "indexes": {
-        "projects_tenant_idx": {
-          "name": "projects_tenant_idx",
+        "projects_user_idx": {
+          "name": "projects_user_idx",
           "columns": [
             {
-              "expression": "tenant_id",
+              "expression": "user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -809,16 +599,12 @@
         }
       },
       "foreignKeys": {
-        "projects_tenant_id_tenants_id_fk": {
-          "name": "projects_tenant_id_tenants_id_fk",
+        "projects_user_id_users_id_fk": {
+          "name": "projects_user_id_users_id_fk",
           "tableFrom": "projects",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -839,11 +625,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "tenant_id": {
-          "name": "tenant_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "seal": {
           "name": "seal",
@@ -930,11 +716,11 @@
         }
       },
       "indexes": {
-        "credentials_tenant_idx": {
-          "name": "credentials_tenant_idx",
+        "credentials_user_idx": {
+          "name": "credentials_user_idx",
           "columns": [
             {
-              "expression": "tenant_id",
+              "expression": "user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -977,16 +763,12 @@
         }
       },
       "foreignKeys": {
-        "credentials_tenant_id_tenants_id_fk": {
-          "name": "credentials_tenant_id_tenants_id_fk",
+        "credentials_user_id_users_id_fk": {
+          "name": "credentials_user_id_users_id_fk",
           "tableFrom": "credentials",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1063,12 +845,8 @@
           "name": "profiles_intro_parent_id_fk",
           "tableFrom": "profiles_intro",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1145,12 +923,8 @@
           "name": "profiles_body_parent_id_fk",
           "tableFrom": "profiles_body",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1233,12 +1007,8 @@
           "name": "profiles_facts_parent_id_fk",
           "tableFrom": "profiles_facts",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1327,12 +1097,8 @@
           "name": "profiles_links_parent_id_fk",
           "tableFrom": "profiles_links",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1353,11 +1119,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "tenant_id": {
-          "name": "tenant_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "name": {
           "name": "name",
@@ -1393,7 +1159,8 @@
           "name": "status_label",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'Currently building'"
         },
         "status_text": {
           "name": "status_text",
@@ -1424,11 +1191,11 @@
         }
       },
       "indexes": {
-        "profiles_tenant_idx": {
-          "name": "profiles_tenant_idx",
+        "profiles_user_idx": {
+          "name": "profiles_user_idx",
           "columns": [
             {
-              "expression": "tenant_id",
+              "expression": "user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1471,16 +1238,12 @@
         }
       },
       "foreignKeys": {
-        "profiles_tenant_id_tenants_id_fk": {
-          "name": "profiles_tenant_id_tenants_id_fk",
+        "profiles_user_id_users_id_fk": {
+          "name": "profiles_user_id_users_id_fk",
           "tableFrom": "profiles",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1557,12 +1320,8 @@
           "name": "stack_groups_items_parent_id_fk",
           "tableFrom": "stack_groups_items",
           "tableTo": "stack_groups",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1583,11 +1342,11 @@
           "primaryKey": true,
           "notNull": true
         },
-        "tenant_id": {
-          "name": "tenant_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "group_name": {
           "name": "group_name",
@@ -1618,11 +1377,11 @@
         }
       },
       "indexes": {
-        "stack_groups_tenant_idx": {
-          "name": "stack_groups_tenant_idx",
+        "stack_groups_user_idx": {
+          "name": "stack_groups_user_idx",
           "columns": [
             {
-              "expression": "tenant_id",
+              "expression": "user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1665,16 +1424,12 @@
         }
       },
       "foreignKeys": {
-        "stack_groups_tenant_id_tenants_id_fk": {
-          "name": "stack_groups_tenant_id_tenants_id_fk",
+        "stack_groups_user_id_users_id_fk": {
+          "name": "stack_groups_user_id_users_id_fk",
           "tableFrom": "stack_groups",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenant_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1845,12 +1600,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "tenants_id": {
-          "name": "tenants_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "users_id": {
           "name": "users_id",
           "type": "integer",
@@ -1918,21 +1667,6 @@
           "columns": [
             {
               "expression": "path",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "payload_locked_documents_rels_tenants_id_idx": {
-          "name": "payload_locked_documents_rels_tenants_id_idx",
-          "columns": [
-            {
-              "expression": "tenants_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -2024,25 +1758,8 @@
           "name": "payload_locked_documents_rels_parent_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "payload_locked_documents_rels_tenants_fk": {
-          "name": "payload_locked_documents_rels_tenants_fk",
-          "tableFrom": "payload_locked_documents_rels",
-          "tableTo": "tenants",
-          "columnsFrom": [
-            "tenants_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2050,12 +1767,8 @@
           "name": "payload_locked_documents_rels_users_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2063,12 +1776,8 @@
           "name": "payload_locked_documents_rels_projects_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "projects",
-          "columnsFrom": [
-            "projects_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["projects_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2076,12 +1785,8 @@
           "name": "payload_locked_documents_rels_credentials_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "credentials",
-          "columnsFrom": [
-            "credentials_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["credentials_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2089,12 +1794,8 @@
           "name": "payload_locked_documents_rels_profiles_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "profiles",
-          "columnsFrom": [
-            "profiles_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["profiles_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2102,12 +1803,8 @@
           "name": "payload_locked_documents_rels_stack_groups_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "stack_groups",
-          "columnsFrom": [
-            "stack_groups_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["stack_groups_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2311,12 +2008,8 @@
           "name": "payload_preferences_rels_parent_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2324,12 +2017,8 @@
           "name": "payload_preferences_rels_users_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2418,40 +2107,20 @@
     }
   },
   "enums": {
-    "public.enum_tenants_theme": {
-      "name": "enum_tenants_theme",
-      "schema": "public",
-      "values": [
-        "editorial"
-      ]
-    },
     "public.enum_users_role": {
       "name": "enum_users_role",
       "schema": "public",
-      "values": [
-        "super-admin",
-        "tenant-admin"
-      ]
+      "values": ["super-admin", "user"]
     },
     "public.enum_credentials_tier": {
       "name": "enum_credentials_tier",
       "schema": "public",
-      "values": [
-        "foundational",
-        "associate",
-        "professional",
-        "expert",
-        "specialty"
-      ]
+      "values": ["foundational", "associate", "professional", "expert", "specialty"]
     },
     "public.enum_credentials_status": {
       "name": "enum_credentials_status",
       "schema": "public",
-      "values": [
-        "active",
-        "expired",
-        "revoked"
-      ]
+      "values": ["active", "expired", "revoked"]
     }
   },
   "schemas": {},
@@ -2464,6 +2133,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "9eb37eb0-1283-478f-ac08-d3dbc4baa479",
+  "id": "4193c372-0a54-4e34-bc3c-ae32ba357851",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
