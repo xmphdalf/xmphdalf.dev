@@ -1,5 +1,11 @@
 import type { CollectionConfig } from 'payload'
 
+const ownOrAdmin = ({ req }: { req: any }) => {
+  if (!req.user) return false
+  if (req.user.role === 'super-admin') return true
+  return { user: { equals: req.user.id } }
+}
+
 export const Projects: CollectionConfig = {
   slug: 'projects',
   admin: {
@@ -9,8 +15,18 @@ export const Projects: CollectionConfig = {
   access: {
     read: () => true,
     create: ({ req }) => !!req.user,
-    update: ({ req }) => !!req.user,
-    delete: ({ req }) => req.user?.role === 'super-admin',
+    update: ownOrAdmin,
+    delete: ownOrAdmin,
+  },
+  hooks: {
+    beforeChange: [
+      ({ data, req, operation }) => {
+        if (operation === 'create' && !data.user) {
+          data.user = req.user?.id
+        }
+        return data
+      },
+    ],
   },
   fields: [
     {
@@ -18,8 +34,13 @@ export const Projects: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       required: true,
+      access: {
+        create: ({ req }) => req.user?.role === 'super-admin',
+        update: ({ req }) => req.user?.role === 'super-admin',
+      },
       admin: {
         description: 'The user this project belongs to.',
+        condition: (_, __, { user }: any) => user?.role === 'super-admin',
       },
     },
     { name: 'title', type: 'text', required: true },
