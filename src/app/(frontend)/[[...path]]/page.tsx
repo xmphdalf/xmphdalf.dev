@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
 import { SiteChrome, type SectionLink } from "@/components/site/SiteChrome";
 import {
@@ -13,16 +13,22 @@ import {
   paragraphs,
   slugify,
   startYearOf,
-  summary,
 } from "@/lib/format";
 import { asMedia, getProfile } from "@/lib/profile";
 import type { Profile } from "@/payload-types";
 
-// Read at request time (the database isn't reachable during the build) and
-// served from the data cache until the profile is saved in the admin.
-export const dynamic = "force-dynamic";
+// The home page is rendered on its first request rather than at build time
+// (the database isn't reachable during the build), then served from the
+// cache. Saving the profile in the admin regenerates it; the daily
+// revalidate is only a fallback.
+export const revalidate = 86400;
+export const dynamicParams = true;
 
-const SITE_URL = "https://xmphdalf.dev";
+export function generateStaticParams(): { path?: string[] }[] {
+  return [];
+}
+
+type PageProps = { params: Promise<{ path?: string[] }> };
 
 const availabilityText: Record<Profile["availability"], string | null> = {
   roles: "open to roles",
@@ -30,30 +36,6 @@ const availabilityText: Record<Profile["availability"], string | null> = {
   both: "open to roles & freelance",
   notLooking: null,
 };
-
-export async function generateMetadata(): Promise<Metadata> {
-  const profile = await getProfile();
-  const title = profile.headline ? `${profile.name} — ${profile.headline}` : profile.name;
-  const description = summary(profile.bio) ?? profile.headline ?? undefined;
-  const photo = asMedia(profile.photo);
-
-  return {
-    metadataBase: new URL(SITE_URL),
-    title,
-    description,
-    alternates: { canonical: "/" },
-    icons: { icon: "/favicon.ico" },
-    openGraph: {
-      type: "profile",
-      url: SITE_URL,
-      siteName: "xmphdalf.dev",
-      title,
-      description,
-      ...(photo ? { images: [{ url: photo.url, alt: photo.alt }] } : {}),
-    },
-    twitter: { card: "summary", title, description },
-  };
-}
 
 const newTab = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -77,7 +59,10 @@ function languageLine(languages: NonNullable<Profile["languages"]>): string {
   return groups.map((g) => `${g.names.join(", ")}${g.level ? ` (${g.level})` : ""}`).join(" · ");
 }
 
-export default async function Home() {
+export default async function Home({ params }: PageProps) {
+  // Only the root path is a page; anything else is a 404.
+  if ((await params).path?.length) notFound();
+
   const profile = await getProfile();
 
   const experience = profile.experience ?? [];

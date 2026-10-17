@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import type React from "react";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
 import { themeInitScript } from "@/components/site/theme";
+import { summary } from "@/lib/format";
+import { getProfile } from "@/lib/profile";
 
 import "./site.css";
 
@@ -18,6 +21,31 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
   display: "swap",
 });
+
+const SITE_URL = "https://xmphdalf.dev";
+
+// Site-wide metadata, read from the profile.
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await getProfile();
+  const title = profile.headline ? `${profile.name} — ${profile.headline}` : profile.name;
+  const description = summary(profile.bio) ?? profile.headline ?? undefined;
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title,
+    description,
+    alternates: { canonical: "/" },
+    icons: { icon: "/favicon.ico" },
+    openGraph: {
+      type: "profile",
+      url: SITE_URL,
+      siteName: "xmphdalf.dev",
+      title,
+      description,
+    },
+    twitter: { card: "summary", title, description },
+  };
+}
 
 export const viewport = {
   themeColor: [
