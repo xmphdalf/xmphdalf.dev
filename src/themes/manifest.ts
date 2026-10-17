@@ -19,6 +19,12 @@ export const THEMES = [
     description: "Oversized type and numbered sections, with its own light and dark.",
     thumbnail: "/designs/bold.png",
   },
+  {
+    id: "editorial",
+    label: "Editorial",
+    description: "Warm paper, serif headings with an italic accent, numbered sections and a career timeline.",
+    thumbnail: "/designs/editorial.png",
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeInfo = {

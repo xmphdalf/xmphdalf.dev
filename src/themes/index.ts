@@ -5,6 +5,8 @@ import type { Profile } from "@/payload-types";
 import type { ThemeId } from "./manifest";
 import BoldTheme from "./bold";
 import BoldNotFound from "./bold/NotFound";
+import EditorialTheme from "./editorial";
+import EditorialNotFound from "./editorial/NotFound";
 import TerminalTheme from "./terminal";
 import TerminalNotFound from "./terminal/NotFound";
 
@@ -23,4 +25,5 @@ export type ThemeComponents = {
 export const THEME_COMPONENTS = {
   terminal: { Page: TerminalTheme, NotFound: TerminalNotFound },
   bold: { Page: BoldTheme, NotFound: BoldNotFound },
+  editorial: { Page: EditorialTheme, NotFound: EditorialNotFound },
 } satisfies Record<ThemeId, ThemeComponents>;
