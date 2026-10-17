@@ -113,7 +113,7 @@ export function SiteChrome({ path, sections, links, children }: Props) {
     ...(links.linkedin ? [{ label: "Open LinkedIn", hint: "link", run: () => openExternal(links.linkedin!) }] : []),
     ...(links.credly ? [{ label: "Open Credly", hint: "link", run: () => openExternal(links.credly!) }] : []),
     ...(links.resume ? [{ label: "Open resume", hint: "link", run: () => openExternal(links.resume!) }] : []),
-    { label: "Toggle theme", hint: "action", run: toggleColorScheme },
+    { label: "Toggle light/dark mode", hint: "action", run: toggleColorScheme },
     ...(links.email
       ? [
           {
@@ -151,7 +151,7 @@ export function SiteChrome({ path, sections, links, children }: Props) {
           <button
             className="scheme-btn"
             type="button"
-            aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
             aria-pressed={dark}
             onClick={toggleColorScheme}
           >
