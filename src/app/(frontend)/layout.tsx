@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type React from "react";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
-import { themeInitScript } from "@/components/site/theme";
+import { colorSchemeInitScript } from "@/components/site/colorScheme";
 import { summary } from "@/lib/format";
 import { getProfile } from "@/lib/profile";
 
@@ -58,7 +58,7 @@ export default function FrontendLayout({ children }: { children: React.ReactNode
   return (
     <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <script dangerouslySetInnerHTML={{ __html: colorSchemeInitScript }} />
       </head>
       <body>{children}</body>
     </html>

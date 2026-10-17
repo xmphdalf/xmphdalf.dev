@@ -18,7 +18,7 @@
   color-scheme: light;
 }
 
-:root[data-theme="dark"] {
+:root[data-color-scheme="dark"] {
   --bg: #1f1f1d;
   --panel: #282825;
   --ink: #ece8df;
@@ -143,7 +143,7 @@ kbd {
 
 .kbd-btn,
 .menu-btn,
-.theme-btn {
+.scheme-btn {
   background: none;
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -172,12 +172,12 @@ kbd {
 }
 
 .kbd-btn:hover,
-.theme-btn:hover {
+.scheme-btn:hover {
   border-color: var(--muted);
   color: var(--ink);
 }
 
-.theme-btn {
+.scheme-btn {
   flex: none;
   width: 32px;
   height: 30px;
@@ -186,17 +186,17 @@ kbd {
   color: var(--muted);
 }
 
-.theme-btn svg {
+.scheme-btn svg {
   width: 15px;
   height: 15px;
 }
 
-.theme-btn .sun,
-:root[data-theme="dark"] .theme-btn .moon {
+.scheme-btn .sun,
+:root[data-color-scheme="dark"] .scheme-btn .moon {
   display: none;
 }
 
-:root[data-theme="dark"] .theme-btn .sun {
+:root[data-color-scheme="dark"] .scheme-btn .sun {
   display: block;
 }
 

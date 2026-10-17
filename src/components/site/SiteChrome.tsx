@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 
 import { CommandPalette, type Command } from "./CommandPalette";
-import { applyTheme, currentTheme, savedTheme, type Theme } from "./theme";
+import { applyColorScheme, currentColorScheme, savedColorScheme, type ColorScheme } from "./colorScheme";
 
 export type SectionLink = { id: string; file: string };
 
@@ -22,10 +22,10 @@ type Props = {
   children: ReactNode;
 };
 
-/** Re-renders when the html data-theme attribute changes. */
-const subscribeTheme = (onChange: () => void) => {
+/** Re-renders when the html data-color-scheme attribute changes. */
+const subscribeColorScheme = (onChange: () => void) => {
   const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-color-scheme"] });
   return () => observer.disconnect();
 };
 
@@ -36,24 +36,24 @@ const shortcutLabel = () => (/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K
 const openExternal = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
 
 export function SiteChrome({ path, sections, links, children }: Props) {
-  const theme = useSyncExternalStore(subscribeTheme, currentTheme, () => "light" as Theme);
+  const colorScheme = useSyncExternalStore(subscribeColorScheme, currentColorScheme, () => "light" as ColorScheme);
   const shortcut = useSyncExternalStore(noopSubscribe, shortcutLabel, () => "⌘K");
   const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [active, setActive] = useState<string | null>(sections[0]?.id ?? null);
 
-  // Follow the system setting until the visitor picks a theme.
+  // Follow the system setting until the visitor picks light or dark.
   useEffect(() => {
     const media = matchMedia("(prefers-color-scheme: dark)");
     const onChange = (event: MediaQueryListEvent) => {
-      if (!savedTheme()) applyTheme(event.matches ? "dark" : "light", false);
+      if (!savedColorScheme()) applyColorScheme(event.matches ? "dark" : "light", false);
     };
     media.addEventListener("change", onChange);
     return () => media.removeEventListener("change", onChange);
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    applyTheme(currentTheme() === "dark" ? "light" : "dark", true);
+  const toggleColorScheme = useCallback(() => {
+    applyColorScheme(currentColorScheme() === "dark" ? "light" : "dark", true);
   }, []);
 
   // Cmd/Ctrl-K opens and closes the palette.
@@ -113,7 +113,7 @@ export function SiteChrome({ path, sections, links, children }: Props) {
     ...(links.linkedin ? [{ label: "Open LinkedIn", hint: "link", run: () => openExternal(links.linkedin!) }] : []),
     ...(links.credly ? [{ label: "Open Credly", hint: "link", run: () => openExternal(links.credly!) }] : []),
     ...(links.resume ? [{ label: "Open resume", hint: "link", run: () => openExternal(links.resume!) }] : []),
-    { label: "Toggle theme", hint: "action", run: toggleTheme },
+    { label: "Toggle theme", hint: "action", run: toggleColorScheme },
     ...(links.email
       ? [
           {
@@ -125,7 +125,7 @@ export function SiteChrome({ path, sections, links, children }: Props) {
       : []),
   ];
 
-  const dark = theme === "dark";
+  const dark = colorScheme === "dark";
 
   return (
     <>
@@ -149,11 +149,11 @@ export function SiteChrome({ path, sections, links, children }: Props) {
             <span className="sr-only"> Open command palette</span>
           </button>
           <button
-            className="theme-btn"
+            className="scheme-btn"
             type="button"
             aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
             aria-pressed={dark}
-            onClick={toggleTheme}
+            onClick={toggleColorScheme}
           >
             <svg className="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
