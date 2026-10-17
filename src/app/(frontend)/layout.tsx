@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type React from "react";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
@@ -7,6 +7,8 @@ import { summary } from "@/lib/format";
 import { getProfile } from "@/lib/profile";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getRenderedTheme } from "@/lib/appearance";
+import ThemeColorSync from "@/components/site/ThemeColorSync";
+import { themeColorFor } from "@/themes/manifest";
 
 const plexSans = IBM_Plex_Sans({
   variable: "--font-plex-sans",
@@ -45,16 +47,22 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f4ef" },
-    { media: "(prefers-color-scheme: dark)", color: "#1f1f1d" },
-  ],
-};
+// The browser UI colour follows the design being shown and the light/dark mode.
+export async function generateViewport(): Promise<Viewport> {
+  const { id } = await getRenderedTheme();
+  const { light, dark } = themeColorFor(id);
+  return {
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: light },
+      { media: "(prefers-color-scheme: dark)", color: dark },
+    ],
+  };
+}
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   // The active design (or the one being previewed) scopes the design CSS.
   const { id: theme } = await getRenderedTheme();
+  const themeColor = themeColorFor(theme);
   return (
     <html
       lang="en"
@@ -65,7 +73,10 @@ export default async function FrontendLayout({ children }: { children: React.Rea
       <head>
         <script dangerouslySetInnerHTML={{ __html: colorSchemeInitScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ThemeColorSync light={themeColor.light} dark={themeColor.dark} />
+      </body>
     </html>
   );
 }
