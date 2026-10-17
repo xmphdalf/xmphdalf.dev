@@ -21,7 +21,13 @@ export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
     return;
   }
 
-  await payload.updateGlobal({ slug: "profile", data: profileSeed, overrideAccess: true, req });
+  await payload.updateGlobal({
+    slug: "profile",
+    data: profileSeed,
+    overrideAccess: true,
+    context: { skipRevalidate: true },
+    req,
+  });
   payload.logger.info("Seeded profile content.");
 }
 
