@@ -2,7 +2,7 @@
 
 import { useField } from "@payloadcms/ui";
 
-import { THEMES } from "../../themes/manifest";
+import { DEFAULT_THEME, isThemeId, THEMES } from "../../themes/manifest";
 
 /**
  * The Designs card list. Edits the hidden activeTheme and enabledThemes
@@ -15,14 +15,18 @@ export function DesignsField() {
 
   const activeId = active.value;
   const enabledIds = Array.isArray(enabled.value) ? enabled.value : [];
+  // Saved ids can outlive a design that was removed from the code.
+  const staleIds = [activeId, ...enabledIds].filter((id) => id && !isThemeId(id));
+  const fallbackLabel = THEMES.find((theme) => theme.id === DEFAULT_THEME)?.label ?? DEFAULT_THEME;
 
+  // Every change also drops ids that are no longer in the code.
   const setEnabled = (id: string, on: boolean) => {
-    const next = on ? [...new Set([...enabledIds, id])] : enabledIds.filter((value) => value !== id);
+    const next = on ? [...enabledIds, id] : enabledIds.filter((value) => value !== id);
     enabled.setValue(THEMES.map((theme) => theme.id).filter((value) => next.includes(value)));
   };
 
   const makeActive = (id: string) => {
-    if (!enabledIds.includes(id)) setEnabled(id, true);
+    setEnabled(id, true);
     active.setValue(id);
   };
 
@@ -35,6 +39,12 @@ export function DesignsField() {
           {field.errorMessage}
         </p>
       ))}
+      {staleIds.length ? (
+        <p className="designs-field__error" role="alert">
+          Saved settings mention a design that is no longer in the code ({[...new Set(staleIds)].join(", ")}).
+          {isThemeId(activeId) ? "" : ` The site is showing ${fallbackLabel} for now.`} Make a design active and save to fix this.
+        </p>
+      ) : null}
       <ul className="designs-field__list">
         {THEMES.map((theme) => {
           const isActive = theme.id === activeId;
