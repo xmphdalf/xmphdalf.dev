@@ -2,7 +2,19 @@ import type { Metadata } from "next";
 import Image from "next/image";
 
 import { SiteChrome, type SectionLink } from "@/components/site/SiteChrome";
-import { displayUrl, formatMonthOrYear, formatSpan, paragraphs, slugify, startYearOf, summary } from "@/lib/format";
+import {
+  displayUrl,
+  endYearOf,
+  formatMonthOrYear,
+  formatRange,
+  formatSpan,
+  normalizeRange,
+  ONGOING,
+  paragraphs,
+  slugify,
+  startYearOf,
+  summary,
+} from "@/lib/format";
 import { asMedia, getProfile } from "@/lib/profile";
 import type { Profile } from "@/payload-types";
 
@@ -83,6 +95,11 @@ export default async function Home() {
   const singleCompany = companies.length === 1 ? experience[0] : null;
   const firstYear = Math.min(...experience.map((role) => startYearOf(role) ?? Infinity));
   const status = availabilityText[profile.availability];
+  const lastYear = Math.max(...experience.map((role) => endYearOf(role) ?? -Infinity));
+  const careerSpan = formatRange(
+    Number.isFinite(firstYear) ? String(firstYear) : null,
+    experience.some((role) => role.current) ? ONGOING : Number.isFinite(lastYear) ? String(lastYear) : null,
+  );
 
   const sections: SectionLink[] = [
     { id: "readme", file: "README.md" },
@@ -189,9 +206,7 @@ export default async function Home() {
             {singleCompany ? (
               <p className="muted">
                 {companyLink(singleCompany)}
-                {Number.isFinite(firstYear)
-                  ? `, ${firstYear} — ${experience.some((role) => role.current) ? "present" : ""}`.replace(/ — $/, "")
-                  : ""}
+                {careerSpan ? `, ${careerSpan}` : ""}
                 {experience.length > 1
                   ? `. ${[...experience].reverse().map((role) => role.role).join(" → ")}.`
                   : "."}
@@ -236,7 +251,7 @@ export default async function Home() {
             <ul className="log">
               {clients.map((client) => (
                 <li key={client.id ?? client.name}>
-                  <span className="mono when">{client.years}</span>
+                  <span className="mono when">{normalizeRange(client.years)}</span>
                   <div>
                     <h3>
                       {client.url ? (

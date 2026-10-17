@@ -20,14 +20,35 @@ type Span = {
   current?: boolean | null;
 };
 
-/** "2023 — Jul 2026", "Jul 2026 — now", or null when nothing is known. */
+/** Separator and wording used for every date range on the site. */
+export const RANGE_SEPARATOR = " – ";
+export const ONGOING = "Present";
+
+/** Joins two ends of a range: "2023 – Jul 2026", "2021 – Present". */
+export function formatRange(start: string | null, end: string | null): string | null {
+  if (start && end) return start === end ? start : `${start}${RANGE_SEPARATOR}${end}`;
+  return start ?? (end && end !== ONGOING ? end : null);
+}
+
+/** "2023 – Jul 2026", "Jul 2026 – Present", or null when nothing is known. */
 export function formatSpan(span: Span): string | null {
   const start = formatMonthOrYear(span.startDate, span.startYear);
-  const end = span.current ? "now" : formatMonthOrYear(span.endDate, span.endYear);
-  if (start && end) return start === end ? start : `${start} — ${end}`;
-  if (start) return start;
-  if (end && end !== "now") return end;
-  return null;
+  const end = span.current ? ONGOING : formatMonthOrYear(span.endDate, span.endYear);
+  return formatRange(start, end);
+}
+
+/**
+ * Tidies a free-text range typed in the admin, such as "2022-2023" or
+ * "2026 — now", into the same style: "2022 – 2023", "2026 – Present".
+ */
+export function normalizeRange(text?: string | null): string | null {
+  const value = text?.trim();
+  if (!value) return null;
+  return value
+    .split(/\s*[–—-]\s*|\s+to\s+/i)
+    .map((part) => (/^(present|now|current)$/i.test(part.trim()) ? ONGOING : part.trim()))
+    .filter(Boolean)
+    .join(RANGE_SEPARATOR);
 }
 
 /** Earliest known year of a span, used to sort or summarise. */
@@ -37,6 +58,15 @@ export function startYearOf(span: Span): number | null {
     if (isValidDate(parsed)) return parsed.getUTCFullYear();
   }
   return typeof span.startYear === "number" ? span.startYear : null;
+}
+
+/** Latest known end year of a span. */
+export function endYearOf(span: Span): number | null {
+  if (span.endDate) {
+    const parsed = new Date(span.endDate);
+    if (isValidDate(parsed)) return parsed.getUTCFullYear();
+  }
+  return typeof span.endYear === "number" ? span.endYear : null;
 }
 
 /** "github.com/name" from "https://github.com/name/". */

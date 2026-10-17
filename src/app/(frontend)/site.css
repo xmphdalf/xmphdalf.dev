@@ -432,7 +432,7 @@ h3 {
 
 .log > li {
   display: grid;
-  grid-template-columns: 8.5rem minmax(0, 1fr);
+  grid-template-columns: 9.5rem minmax(0, 1fr);
   gap: 1rem;
   padding: 1.2rem 0;
   border-top: 1px dashed var(--line);
@@ -442,6 +442,7 @@ h3 {
   font-size: 0.8rem;
   color: var(--muted);
   padding-top: 0.15rem;
+  white-space: nowrap;
 }
 
 .org {
