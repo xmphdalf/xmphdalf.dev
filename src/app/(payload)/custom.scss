@@ -1,0 +1,94 @@
+// Keep admin styling minimal. Payload's own theme variables do most of the work,
+// so light and dark mode keep working without extra overrides.
+@layer payload {
+  .mini-dashboard {
+    --mini-gap: calc(var(--base) * 1);
+    --mini-radius: var(--style-radius-m);
+    --mini-border: 1px solid var(--theme-elevation-150);
+
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--base) * 2);
+    padding-top: calc(var(--base) * 2);
+    padding-bottom: calc(var(--base) * 3);
+    max-width: 56rem;
+  }
+
+  .mini-dashboard__eyebrow {
+    margin: 0;
+    color: var(--theme-elevation-500);
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .mini-dashboard__title {
+    margin: calc(var(--base) * 0.25) 0 0;
+  }
+
+  .mini-dashboard__headline {
+    margin: calc(var(--base) * 0.25) 0 0;
+    color: var(--theme-elevation-700);
+  }
+
+  .mini-dashboard__meta {
+    margin: calc(var(--base) * 0.5) 0 0;
+    color: var(--theme-elevation-500);
+    font-size: 0.875rem;
+  }
+
+  .mini-dashboard__counts {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+    gap: var(--mini-gap);
+    margin: 0;
+  }
+
+  .mini-dashboard__count {
+    padding: var(--mini-gap);
+    border: var(--mini-border);
+    border-radius: var(--mini-radius);
+
+    dt {
+      color: var(--theme-elevation-500);
+      font-size: 0.8125rem;
+    }
+
+    dd {
+      margin: calc(var(--base) * 0.25) 0 0;
+      font-size: 1.5rem;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .mini-dashboard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--base) * 0.5);
+  }
+
+  .mini-dashboard__button {
+    display: inline-flex;
+    align-items: center;
+    padding: calc(var(--base) * 0.4) calc(var(--base) * 0.9);
+    border: var(--mini-border);
+    border-radius: var(--mini-radius);
+    color: var(--theme-text);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--theme-elevation-400);
+    }
+
+    &--primary {
+      background: var(--theme-text);
+      border-color: var(--theme-text);
+      color: var(--theme-bg);
+
+      &:hover {
+        border-color: var(--theme-text);
+        opacity: 0.9;
+      }
+    }
+  }
+}
