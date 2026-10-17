@@ -6,7 +6,7 @@ import { colorSchemeInitScript } from "@/lib/colorScheme";
 import { summary } from "@/lib/format";
 import { getProfile } from "@/lib/profile";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
-import { DEFAULT_THEME } from "@/themes/manifest";
+import { getRenderedTheme } from "@/lib/appearance";
 
 const plexSans = IBM_Plex_Sans({
   variable: "--font-plex-sans",
@@ -52,12 +52,14 @@ export const viewport = {
   ],
 };
 
-export default function FrontendLayout({ children }: { children: React.ReactNode }) {
+export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
+  // The active design (or the one being previewed) scopes the design CSS.
+  const { id: theme } = await getRenderedTheme();
   return (
     <html
       lang="en"
       className={`${plexSans.variable} ${plexMono.variable}`}
-      data-site-theme={DEFAULT_THEME}
+      data-site-theme={theme}
       suppressHydrationWarning
     >
       <head>

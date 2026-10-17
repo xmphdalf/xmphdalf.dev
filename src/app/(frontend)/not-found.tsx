@@ -1,21 +1,11 @@
-import Link from "next/link";
+import { getRenderedTheme } from "@/lib/appearance";
+import { THEME_COMPONENTS, type ThemeComponents } from "@/themes";
+import { DEFAULT_THEME } from "@/themes/manifest";
 
-import ApplyColorScheme from "@/components/site/ApplyColorScheme";
-
-// Uses the terminal design's styles until 404s follow the active design.
-import "@/themes/terminal/terminal.css";
-
-export default function NotFound() {
-  return (
-    <main id="main" className="main">
-      <ApplyColorScheme />
-      <section className="pane" aria-labelledby="not-found-title">
-        <p className="tab mono">404</p>
-        <h1 id="not-found-title">Page not found</h1>
-        <p className="lede">
-          <Link href="/">Back to the home page</Link>
-        </p>
-      </section>
-    </main>
-  );
+/** The 404 page in the active design, or the default design's if it has none. */
+export default async function NotFound() {
+  const { id } = await getRenderedTheme();
+  const designs: Record<string, ThemeComponents> = THEME_COMPONENTS;
+  const Component = designs[id].NotFound ?? designs[DEFAULT_THEME].NotFound;
+  return Component ? <Component /> : null;
 }
