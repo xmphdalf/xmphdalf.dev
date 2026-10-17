@@ -5,6 +5,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { colorSchemeInitScript } from "@/lib/colorScheme";
 import { summary } from "@/lib/format";
 import { getProfile } from "@/lib/profile";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const plexSans = IBM_Plex_Sans({
   variable: "--font-plex-sans",
@@ -19,8 +20,6 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
   display: "swap",
 });
-
-const SITE_URL = "https://xmphdalf.dev";
 
 // Defined here, next to opengraph-image.tsx, so the generated image is used.
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       type: "profile",
       url: SITE_URL,
-      siteName: "xmphdalf.dev",
+      siteName: SITE_NAME,
       title,
       description,
     },

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getProfile } from "@/lib/profile";
+import { jsonLdScript, profileJsonLd } from "@/lib/structuredData";
 import TerminalTheme from "@/themes/terminal";
 
 // The home page is rendered on its first request rather than at build time
@@ -21,5 +22,11 @@ export default async function Home({ params }: PageProps) {
   if ((await params).path?.length) notFound();
 
   const profile = await getProfile();
-  return <TerminalTheme profile={profile} />;
+  // Structured data sits outside the design, so every design gets it.
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(profileJsonLd(profile)) }} />
+      <TerminalTheme profile={profile} />
+    </>
+  );
 }
