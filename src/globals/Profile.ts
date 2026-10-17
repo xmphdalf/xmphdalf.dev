@@ -3,6 +3,7 @@ import type { GlobalConfig, NumberField } from "payload";
 import { anyone, authenticated } from "../access/authenticated";
 import { rowLabel } from "../fields/rowLabel";
 import { urlField } from "../fields/url";
+import { revalidateSite } from "../hooks/revalidateSite";
 
 const yearField = (
   name: string,
@@ -37,6 +38,9 @@ export const Profile: GlobalConfig = {
     read: anyone,
     update: authenticated,
     readVersions: authenticated,
+  },
+  hooks: {
+    afterChange: [revalidateSite],
   },
   versions: {
     max: 50,
