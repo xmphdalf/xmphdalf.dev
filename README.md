@@ -2,4 +2,13 @@
 
 Personal site of Mihir Lathiya.
 
-This repo is being rebuilt from scratch.
+Built with Next.js.
+
+## Development
+
+```bash
+npm install
+npm run dev     # http://localhost:3000
+npm run build
+npm start       # uses PORT if set, defaults to 3000
+```
