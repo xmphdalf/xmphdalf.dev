@@ -161,6 +161,16 @@ kbd {
   font: 0.8rem var(--mono);
 }
 
+.kbd-btn kbd {
+  white-space: nowrap;
+}
+
+.kbd-btn .search-icon {
+  display: none;
+  width: 16px;
+  height: 16px;
+}
+
 .kbd-btn:hover,
 .theme-btn:hover {
   border-color: var(--muted);
@@ -807,4 +817,28 @@ h3 {
   font-size: 0.75rem;
   color: var(--muted);
   margin-top: 0.5rem;
+}
+
+/* Phones and narrow screens: no keyboard shortcut to advertise, show a search icon instead. */
+@media (max-width: 600px), (hover: none) and (pointer: coarse) {
+  .kbd-btn {
+    flex: none;
+    width: 32px;
+    height: 30px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .kbd-btn .label,
+  .kbd-btn kbd {
+    display: none;
+  }
+
+  .kbd-btn .search-icon {
+    display: block;
+  }
+
+  .side-foot {
+    display: none;
+  }
 }

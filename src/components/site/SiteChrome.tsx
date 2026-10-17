@@ -142,6 +142,10 @@ export function SiteChrome({ path, sections, links, children }: Props) {
             onClick={() => setPaletteOpen(true)}
           >
             <span className="label">Jump to…</span> <kbd>{shortcut}</kbd>
+            <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="M20 20l-4.2-4.2" />
+            </svg>
             <span className="sr-only"> Open command palette</span>
           </button>
           <button
