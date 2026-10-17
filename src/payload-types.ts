@@ -403,6 +403,26 @@ export interface Profile {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Newest first. Drag rows to reorder.
+   */
+  clients?:
+    | {
+        name: string;
+        /**
+         * Years, or Mon YYYY – Mon YYYY if known
+         */
+        years?: string | null;
+        role?: string | null;
+        url?: string | null;
+        summary?: string | null;
+        /**
+         * Type a technology and press Enter to add it.
+         */
+        tech?: string[] | null;
+        id?: string | null;
+      }[]
+    | null;
   education?:
     | {
         institution: string;
@@ -483,6 +503,17 @@ export interface ProfileSelect<T extends boolean = true> {
               text?: T;
               id?: T;
             };
+        id?: T;
+      };
+  clients?:
+    | T
+    | {
+        name?: T;
+        years?: T;
+        role?: T;
+        url?: T;
+        summary?: T;
+        tech?: T;
         id?: T;
       };
   education?:

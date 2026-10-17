@@ -222,6 +222,51 @@ export const Profile: GlobalConfig = {
           ],
         },
         {
+          label: "Client work",
+          fields: [
+            {
+              name: "clients",
+              type: "array",
+              labels: { singular: "Client", plural: "Clients" },
+              admin: {
+                description: "Newest first. Drag rows to reorder.",
+                initCollapsed: true,
+                components: { RowLabel: rowLabel(["name", "years"], "Client") },
+              },
+              fields: [
+                {
+                  type: "row",
+                  fields: [
+                    { name: "name", type: "text", required: true },
+                    {
+                      name: "years",
+                      type: "text",
+                      admin: {
+                        placeholder: "e.g. 2022 – 2023",
+                        description: "Years, or Mon YYYY – Mon YYYY if known",
+                      },
+                    },
+                  ],
+                },
+                {
+                  type: "row",
+                  fields: [
+                    { name: "role", type: "text" },
+                    urlField({ name: "url", label: "Website" }),
+                  ],
+                },
+                { name: "summary", type: "textarea" },
+                {
+                  name: "tech",
+                  type: "text",
+                  hasMany: true,
+                  admin: { description: "Type a technology and press Enter to add it." },
+                },
+              ],
+            },
+          ],
+        },
+        {
           label: "Education",
           fields: [
             {
