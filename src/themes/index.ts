@@ -13,7 +13,7 @@ import TerminalNotFound from "./terminal/NotFound";
 export type ThemeComponents = {
   /** The home page. Receives the whole profile. */
   Page: ComponentType<{ profile: Profile }>;
-  /** The 404 page. Optional; the default design's is used when missing. */
+  /** The 404 page. Optional; a plain self-styled 404 is shown when missing. */
   NotFound?: ComponentType;
 };
 
