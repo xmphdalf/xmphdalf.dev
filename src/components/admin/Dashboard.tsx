@@ -27,6 +27,7 @@ export async function Dashboard({ initPageResult }: AdminViewServerProps) {
 
   const counts = [
     { label: "Roles", value: profile.experience?.length ?? 0 },
+    { label: "Clients", value: profile.clients?.length ?? 0 },
     { label: "Education", value: profile.education?.length ?? 0 },
     { label: "Certifications", value: profile.certifications?.length ?? 0 },
     { label: "Skill groups", value: profile.skills?.length ?? 0 },
