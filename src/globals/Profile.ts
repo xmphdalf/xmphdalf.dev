@@ -1,8 +1,21 @@
-import type { GlobalConfig } from "payload";
+import type { GlobalConfig, NumberField } from "payload";
 
 import { anyone, authenticated } from "../access/authenticated";
 import { rowLabel } from "../fields/rowLabel";
 import { urlField } from "../fields/url";
+
+const yearField = (
+  name: string,
+  label: string,
+  condition?: NonNullable<NumberField["admin"]>["condition"],
+): NumberField => ({
+  name,
+  label,
+  type: "number",
+  min: 1900,
+  max: 2100,
+  admin: { step: 1, placeholder: "e.g. 2023", ...(condition ? { condition } : {}) },
+});
 
 const monthPicker = {
   pickerAppearance: "monthOnly",
@@ -80,6 +93,24 @@ export const Profile: GlobalConfig = {
               filterOptions: { mimeType: { contains: "image" } },
               admin: { description: "Square images work best." },
             },
+            {
+              name: "languages",
+              type: "array",
+              labels: { singular: "Language", plural: "Languages" },
+              admin: {
+                initCollapsed: true,
+                components: { RowLabel: rowLabel(["language", "level"], "Language") },
+              },
+              fields: [
+                {
+                  type: "row",
+                  fields: [
+                    { name: "language", type: "text", required: true },
+                    { name: "level", type: "text", admin: { placeholder: "e.g. Fluent" } },
+                  ],
+                },
+              ],
+            },
           ],
         },
         {
@@ -142,13 +173,26 @@ export const Profile: GlobalConfig = {
                 {
                   type: "row",
                   fields: [
-                    { name: "startDate", type: "date", label: "Start month", admin: { date: monthPicker } },
+                    yearField("startYear", "Start year"),
+                    yearField("endYear", "End year", (_, siblingData) => !siblingData?.current),
+                  ],
+                },
+                {
+                  type: "row",
+                  fields: [
+                    {
+                      name: "startDate",
+                      type: "date",
+                      label: "Start month",
+                      admin: { date: monthPicker, description: "Optional. Shown instead of the year when set." },
+                    },
                     {
                       name: "endDate",
                       type: "date",
                       label: "End month",
                       admin: {
                         date: monthPicker,
+                        description: "Optional. Shown instead of the year when set.",
                         condition: (_, siblingData) => !siblingData?.current,
                       },
                     },
@@ -235,7 +279,18 @@ export const Profile: GlobalConfig = {
                       label: "Credly badge link",
                       description: "Public link to this badge",
                     }),
-                    { name: "issuedDate", type: "date", admin: { date: monthPicker } },
+                  ],
+                },
+                {
+                  type: "row",
+                  fields: [
+                    yearField("issuedYear", "Issued year"),
+                    {
+                      name: "issuedDate",
+                      type: "date",
+                      label: "Issued month",
+                      admin: { date: monthPicker, description: "Optional. Shown instead of the year when set." },
+                    },
                   ],
                 },
               ],

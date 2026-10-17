@@ -327,7 +327,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Your public details. Every frontend reads from here.
+ * Everything shown on your public site.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "profile".
@@ -340,7 +340,7 @@ export interface Profile {
    */
   headline?: string | null;
   /**
-   * A short introduction. Plain text, blank lines start a new paragraph.
+   * A short introduction in plain text. Leave a blank line to start a new paragraph.
    */
   bio?: string | null;
   location?: string | null;
@@ -353,8 +353,18 @@ export interface Profile {
    * Square images work best.
    */
   photo?: (number | null) | Media;
+  languages?:
+    | {
+        language: string;
+        level?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   github?: string | null;
   linkedin?: string | null;
+  /**
+   * Your Credly profile page
+   */
   credly?: string | null;
   website?: string | null;
   /**
@@ -370,11 +380,22 @@ export interface Profile {
         companyUrl?: string | null;
         role: string;
         location?: string | null;
+        startYear?: number | null;
+        endYear?: number | null;
+        /**
+         * Optional. Shown instead of the year when set.
+         */
         startDate?: string | null;
+        /**
+         * Optional. Shown instead of the year when set.
+         */
         endDate?: string | null;
         current?: boolean | null;
         highlights?:
           | {
+              /**
+               * One plain sentence about what you did.
+               */
               text: string;
               id?: string | null;
             }[]
@@ -395,7 +416,14 @@ export interface Profile {
     | {
         name: string;
         issuer?: string | null;
+        /**
+         * Public link to this badge
+         */
         credlyUrl?: string | null;
+        issuedYear?: number | null;
+        /**
+         * Optional. Shown instead of the year when set.
+         */
         issuedDate?: string | null;
         id?: string | null;
       }[]
@@ -425,6 +453,13 @@ export interface ProfileSelect<T extends boolean = true> {
   email?: T;
   availability?: T;
   photo?: T;
+  languages?:
+    | T
+    | {
+        language?: T;
+        level?: T;
+        id?: T;
+      };
   github?: T;
   linkedin?: T;
   credly?: T;
@@ -437,6 +472,8 @@ export interface ProfileSelect<T extends boolean = true> {
         companyUrl?: T;
         role?: T;
         location?: T;
+        startYear?: T;
+        endYear?: T;
         startDate?: T;
         endDate?: T;
         current?: T;
@@ -463,6 +500,7 @@ export interface ProfileSelect<T extends boolean = true> {
         name?: T;
         issuer?: T;
         credlyUrl?: T;
+        issuedYear?: T;
         issuedDate?: T;
         id?: T;
       };
