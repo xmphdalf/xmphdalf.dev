@@ -11,6 +11,8 @@ All profile content sits in one Payload global, `profile`, edited at `/admin`. F
 - Admin: `/admin`
 - Profile JSON: `/api/globals/profile`
 
+The home page reads the profile through Payload's Local API and caches it. Saving the profile in the admin clears that cache, so changes show on the site straight away. Empty fields and sections are left out of the page.
+
 ## Development
 
 Needs Node 24 and a Postgres database.
