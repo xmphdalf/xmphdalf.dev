@@ -92,3 +92,118 @@
     }
   }
 }
+
+// Designs global: one card per design in src/themes/manifest.ts.
+@layer payload {
+  .designs-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--base);
+    margin-bottom: calc(var(--base) * 2);
+  }
+
+  .designs-field__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: var(--base);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .designs-field__card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--style-radius-m);
+    background: var(--theme-elevation-0);
+
+    &.is-active {
+      border-color: var(--theme-success-500);
+      box-shadow: 0 0 0 1px var(--theme-success-500);
+    }
+  }
+
+  .designs-field__thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top;
+    border-bottom: 1px solid var(--theme-elevation-150);
+    background: var(--theme-elevation-50);
+  }
+
+  .designs-field__body {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--base) * 0.5);
+    padding: var(--base);
+  }
+
+  .designs-field__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(var(--base) * 0.5);
+
+    h3 {
+      margin: 0;
+    }
+  }
+
+  .designs-field__badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    background: var(--theme-elevation-100);
+    color: var(--theme-elevation-800);
+
+    &.is-active {
+      background: var(--theme-success-100);
+      color: var(--theme-success-800);
+    }
+
+    &.is-off {
+      color: var(--theme-elevation-500);
+    }
+  }
+
+  .designs-field__desc,
+  .designs-field__hint,
+  .designs-field__note {
+    margin: 0;
+    color: var(--theme-elevation-600);
+  }
+
+  .designs-field__hint,
+  .designs-field__note {
+    font-size: 0.8125rem;
+  }
+
+  .designs-field__toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .designs-field__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--base) * 0.5);
+
+    .btn {
+      margin: 0;
+    }
+  }
+
+  .designs-field__error {
+    margin: 0;
+    padding: calc(var(--base) * 0.5) var(--base);
+    border-radius: var(--style-radius-s);
+    background: var(--theme-error-100);
+    color: var(--theme-error-800);
+  }
+}
