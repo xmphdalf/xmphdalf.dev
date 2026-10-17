@@ -6,6 +6,7 @@ import { colorSchemeInitScript } from "@/lib/colorScheme";
 import { summary } from "@/lib/format";
 import { getProfile } from "@/lib/profile";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { DEFAULT_THEME } from "@/themes/manifest";
 
 const plexSans = IBM_Plex_Sans({
   variable: "--font-plex-sans",
@@ -53,7 +54,12 @@ export const viewport = {
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${plexSans.variable} ${plexMono.variable}`}
+      data-site-theme={DEFAULT_THEME}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: colorSchemeInitScript }} />
       </head>
