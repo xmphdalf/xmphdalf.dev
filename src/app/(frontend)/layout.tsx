@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import type React from "react";
 import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
-import { colorSchemeInitScript } from "@/components/site/colorScheme";
+import { colorSchemeInitScript } from "@/lib/colorScheme";
 import { summary } from "@/lib/format";
 import { getProfile } from "@/lib/profile";
-
-import "./site.css";
 
 const plexSans = IBM_Plex_Sans({
   variable: "--font-plex-sans",

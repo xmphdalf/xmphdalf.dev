@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 
 import { CommandPalette, type Command } from "./CommandPalette";
-import { applyColorScheme, currentColorScheme, savedColorScheme, type ColorScheme } from "./colorScheme";
+import { applyColorScheme, currentColorScheme, savedColorScheme, type ColorScheme } from "@/lib/colorScheme";
 
 export type SectionLink = { id: string; file: string };
 
