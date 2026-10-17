@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
 
 const SITE_URL = "https://xmphdalf.dev";
 
-// Site-wide metadata, read from the profile.
+// Defined here, next to opengraph-image.tsx, so the generated image is used.
 export async function generateMetadata(): Promise<Metadata> {
   const profile = await getProfile();
   const title = profile.headline ? `${profile.name} — ${profile.headline}` : profile.name;
@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title,
       description,
     },
-    twitter: { card: "summary", title, description },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
