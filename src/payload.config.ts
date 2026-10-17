@@ -34,7 +34,7 @@ export default buildConfig({
     },
     meta: {
       title: "Admin",
-      titleSuffix: " | xmphdalf.dev",
+      titleSuffix: "| xmphdalf.dev",
     },
     components: {
       views: {
