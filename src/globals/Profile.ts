@@ -18,7 +18,7 @@ export const Profile: GlobalConfig = {
   slug: "profile",
   label: "Profile",
   admin: {
-    description: "Your public details. Every frontend reads from here.",
+    description: "Everything shown on your public site.",
   },
   access: {
     read: anyone,
@@ -50,7 +50,9 @@ export const Profile: GlobalConfig = {
             {
               name: "bio",
               type: "textarea",
-              admin: { description: "A short introduction. Plain text, blank lines start a new paragraph." },
+              admin: {
+                description: "A short introduction in plain text. Leave a blank line to start a new paragraph.",
+              },
             },
             {
               type: "row",
@@ -93,7 +95,11 @@ export const Profile: GlobalConfig = {
             {
               type: "row",
               fields: [
-                urlField({ name: "credly", label: "Credly profile" }),
+                urlField({
+                  name: "credly",
+                  label: "Credly profile",
+                  description: "Your Credly profile page",
+                }),
                 urlField({ name: "website" }),
               ],
             },
@@ -136,10 +142,11 @@ export const Profile: GlobalConfig = {
                 {
                   type: "row",
                   fields: [
-                    { name: "startDate", type: "date", admin: { date: monthPicker } },
+                    { name: "startDate", type: "date", label: "Start month", admin: { date: monthPicker } },
                     {
                       name: "endDate",
                       type: "date",
+                      label: "End month",
                       admin: {
                         date: monthPicker,
                         condition: (_, siblingData) => !siblingData?.current,
@@ -153,7 +160,14 @@ export const Profile: GlobalConfig = {
                   type: "array",
                   labels: { singular: "Highlight", plural: "Highlights" },
                   admin: { components: { RowLabel: rowLabel(["text"], "Highlight") } },
-                  fields: [{ name: "text", type: "textarea", required: true }],
+                  fields: [
+                    {
+                      name: "text",
+                      type: "textarea",
+                      required: true,
+                      admin: { description: "One plain sentence about what you did." },
+                    },
+                  ],
                 },
               ],
             },
@@ -181,8 +195,13 @@ export const Profile: GlobalConfig = {
                 {
                   type: "row",
                   fields: [
-                    { name: "score", type: "text", admin: { placeholder: "e.g. 8.62 CGPA" } },
-                    { name: "note", type: "text", admin: { placeholder: "e.g. 3rd rank" } },
+                    { name: "score", type: "text", label: "Score", admin: { placeholder: "e.g. 8.62 CGPA" } },
+                    {
+                      name: "note",
+                      type: "text",
+                      label: "Note (e.g. rank)",
+                      admin: { placeholder: "e.g. 3rd rank" },
+                    },
                   ],
                 },
               ],
@@ -211,7 +230,11 @@ export const Profile: GlobalConfig = {
                 {
                   type: "row",
                   fields: [
-                    urlField({ name: "credlyUrl", label: "Credly verify URL" }),
+                    urlField({
+                      name: "credlyUrl",
+                      label: "Credly badge link",
+                      description: "Public link to this badge",
+                    }),
                     { name: "issuedDate", type: "date", admin: { date: monthPicker } },
                   ],
                 },
@@ -235,7 +258,7 @@ export const Profile: GlobalConfig = {
                   name: "group",
                   type: "text",
                   required: true,
-                  admin: { placeholder: "e.g. Languages" },
+                  admin: { placeholder: "e.g. Backend" },
                 },
                 {
                   name: "items",

@@ -12,16 +12,18 @@ const isHttpUrl = (value: string): boolean => {
 type UrlFieldArgs = {
   name: string;
   label?: string;
+  description?: string;
   required?: boolean;
 };
 
-export const urlField = ({ name, label, required = false }: UrlFieldArgs): TextField => ({
+export const urlField = ({ name, label, description, required = false }: UrlFieldArgs): TextField => ({
   name,
   label,
   required,
   type: "text",
   admin: {
     placeholder: "https://",
+    ...(description ? { description } : {}),
   },
   validate: (value: string | null | undefined) => {
     if (!value) return required ? "This field is required." : true;
