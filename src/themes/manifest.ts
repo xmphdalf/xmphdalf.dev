@@ -13,6 +13,12 @@ export const THEMES = [
     description: "Dark and light code-editor look with file tabs and a command palette.",
     thumbnail: "/designs/terminal.png",
   },
+  {
+    id: "bold",
+    label: "Bold",
+    description: "Oversized type and numbered sections, with its own light and dark.",
+    thumbnail: "/designs/bold.png",
+  },
 ] as const satisfies readonly ThemeInfo[];
 
 export type ThemeInfo = {
