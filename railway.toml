@@ -3,6 +3,8 @@ builder = "RAILPACK"
 buildCommand = "npm run build"
 
 [deploy]
+# One-off: wipe the old schema and apply migrations from scratch. Remove after this deploy.
+preDeployCommand = ["npm run payload -- migrate:fresh --force-accept-warning"]
 startCommand = "npm start"
 healthcheckPath = "/"
 healthcheckTimeout = 120
