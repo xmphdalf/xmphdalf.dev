@@ -89,9 +89,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     profile: Profile;
+    appearance: Appearance;
   };
   globalsSelect: {
     profile: ProfileSelect<false> | ProfileSelect<true>;
+    appearance: AppearanceSelect<false> | AppearanceSelect<true>;
   };
   locale: null;
   widgets: {
@@ -462,6 +464,19 @@ export interface Profile {
   createdAt?: string | null;
 }
 /**
+ * Choose how your public site looks. Your content stays the same in every design.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appearance".
+ */
+export interface Appearance {
+  id: number;
+  activeTheme: string;
+  enabledThemes?: string[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "profile_select".
  */
@@ -542,6 +557,17 @@ export interface ProfileSelect<T extends boolean = true> {
         items?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appearance_select".
+ */
+export interface AppearanceSelect<T extends boolean = true> {
+  activeTheme?: T;
+  enabledThemes?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -5,6 +5,7 @@ import * as migration_20261017_073000_seed_profile from './20261017_073000_seed_
 import * as migration_20261017_080000_fill_profile_years_languages from './20261017_080000_fill_profile_years_languages';
 import * as migration_20261017_081000_fill_profile_clients from './20261017_081000_fill_profile_clients';
 import * as migration_20261017_090000_update_wme_role_and_credly from './20261017_090000_update_wme_role_and_credly';
+import * as migration_20261017_105853_designs from './20261017_105853_designs';
 
 export const migrations = [
   {
@@ -41,5 +42,10 @@ export const migrations = [
     up: migration_20261017_090000_update_wme_role_and_credly.up,
     down: migration_20261017_090000_update_wme_role_and_credly.down,
     name: '20261017_090000_update_wme_role_and_credly',
+  },
+  {
+    up: migration_20261017_105853_designs.up,
+    down: migration_20261017_105853_designs.down,
+    name: '20261017_105853_designs'
   },
 ];

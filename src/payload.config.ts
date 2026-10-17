@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 
 import { Media } from "./collections/Media";
 import { Users } from "./collections/Users";
+import { Appearance } from "./globals/Appearance";
 import { Profile } from "./globals/Profile";
 import { migrations } from "./migrations";
 
@@ -45,7 +46,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media],
-  globals: [Profile],
+  globals: [Profile, Appearance],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
