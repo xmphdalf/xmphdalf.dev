@@ -6,6 +6,7 @@ import sharp from "sharp";
 import { fileURLToPath } from "url";
 
 import { Media } from "./collections/Media";
+import { Posts } from "./collections/Posts";
 import { Users } from "./collections/Users";
 import { Appearance } from "./globals/Appearance";
 import { Profile } from "./globals/Profile";
@@ -45,7 +46,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [Users, Media],
+  collections: [Posts, Media, Users],
   globals: [Profile, Appearance],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",

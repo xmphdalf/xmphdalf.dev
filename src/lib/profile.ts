@@ -19,5 +19,5 @@ export const getProfile = unstable_cache(
 );
 
 /** An upload field only counts when it was populated with a file URL. */
-export const asMedia = (value: Profile["photo"]): (Media & { url: string }) | null =>
+export const asMedia = (value: number | Media | null | undefined): (Media & { url: string }) | null =>
   value && typeof value === "object" && value.url ? (value as Media & { url: string }) : null;

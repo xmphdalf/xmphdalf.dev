@@ -20,12 +20,16 @@ export async function Dashboard({ initPageResult }: AdminViewServerProps) {
   // The dashboard already sits behind the admin login, but check anyway.
   if (!user) redirect("/admin/login");
 
-  const [profile, media] = await Promise.all([
+  const [profile, media, published, drafts] = await Promise.all([
     payload.findGlobal({ slug: "profile", depth: 0, overrideAccess: false, req }),
     payload.count({ collection: "media", overrideAccess: false, req }),
+    payload.count({ collection: "posts", where: { _status: { equals: "published" } }, overrideAccess: false, req }),
+    payload.count({ collection: "posts", where: { _status: { equals: "draft" } }, overrideAccess: false, req }),
   ]);
 
   const counts = [
+    { label: "Published posts", value: published.totalDocs },
+    { label: "Drafts", value: drafts.totalDocs },
     { label: "Roles", value: profile.experience?.length ?? 0 },
     { label: "Clients", value: profile.clients?.length ?? 0 },
     { label: "Education", value: profile.education?.length ?? 0 },
@@ -55,7 +59,13 @@ export async function Dashboard({ initPageResult }: AdminViewServerProps) {
       </dl>
 
       <div className="mini-dashboard__actions">
-        <Link className="mini-dashboard__button mini-dashboard__button--primary" href="/admin/globals/profile">
+        <Link className="mini-dashboard__button mini-dashboard__button--primary" href="/admin/collections/posts/create">
+          New post
+        </Link>
+        <Link className="mini-dashboard__button" href="/admin/collections/posts">
+          All posts
+        </Link>
+        <Link className="mini-dashboard__button" href="/admin/globals/profile">
           Edit profile
         </Link>
         <a className="mini-dashboard__button" href={siteUrl} rel="noopener noreferrer" target="_blank">

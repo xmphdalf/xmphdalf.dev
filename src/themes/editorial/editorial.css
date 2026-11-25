@@ -887,3 +887,486 @@ html:where([data-site-theme="editorial"]) {
   min-height: 100vh;
   border-bottom: 0;
 }
+
+/* Masthead: the open page */
+
+:where(:root[data-site-theme="editorial"]) .nav a[aria-current="page"] {
+  color: var(--editorial-acc);
+  background-size: 100% 1px;
+}
+
+/* Writing on the home page: a lead story and a contents list */
+
+:where(:root[data-site-theme="editorial"]) .dispatch {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 4rem;
+  margin-left: var(--editorial-indent);
+}
+
+:where(:root[data-site-theme="editorial"]) .lead-story {
+  border-top: 1px solid var(--editorial-rule-strong);
+  padding-top: 1.2rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .lead-story h3 {
+  margin-top: 0.8rem;
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+:where(:root[data-site-theme="editorial"]) .lead-dek {
+  margin-top: 1rem;
+  max-width: 44ch;
+  font: italic 400 1.2rem/1.5 var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-soft);
+}
+
+:where(:root[data-site-theme="editorial"]) .story-link {
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-link:hover {
+  color: var(--editorial-acc);
+  font-style: italic;
+}
+
+:where(:root[data-site-theme="editorial"]) .contents-wrap {
+  border-top: 1px solid var(--editorial-rule-strong);
+  padding-top: 1.2rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .contents {
+  list-style: none;
+  margin-top: 0.4rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .contents li {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--editorial-rule);
+}
+
+:where(:root[data-site-theme="editorial"]) .contents-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+:where(:root[data-site-theme="editorial"]) .contents-title {
+  font: 400 1.15rem/1.35 var(--editorial-serif), Georgia, serif;
+  transition: color 0.2s;
+}
+
+/* Dotted leaders, as in a printed contents page. */
+:where(:root[data-site-theme="editorial"]) .contents-leader {
+  flex: 1;
+  min-width: 1.5rem;
+  border-bottom: 1px dotted var(--editorial-link-line);
+  transform: translateY(-0.3em);
+}
+
+:where(:root[data-site-theme="editorial"]) .contents-mins {
+  flex: none;
+  font: italic 400 0.95rem var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(:root[data-site-theme="editorial"]) .contents-row:hover .contents-title {
+  color: var(--editorial-acc);
+}
+
+:where(:root[data-site-theme="editorial"]) .contents-date {
+  margin-top: 0.15rem;
+  font-size: 0.78rem;
+  color: var(--editorial-soft);
+}
+
+:where(:root[data-site-theme="editorial"]) .more {
+  margin: 2.5rem 0 0 var(--editorial-indent);
+  font-size: 0.95rem;
+  color: var(--editorial-acc);
+}
+
+/* Blog index */
+
+:where(:root[data-site-theme="editorial"]) .blog-cover h1 {
+  margin-bottom: 2.5rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .blog-feed {
+  align-self: end;
+  justify-self: end;
+}
+
+:where(:root[data-site-theme="editorial"]) .block.year {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+:where(:root[data-site-theme="editorial"]) .block.year .block-head {
+  margin-bottom: 2rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .entries {
+  list-style: none;
+  margin-left: var(--editorial-indent);
+  border-top: 1px solid var(--editorial-rule-strong);
+}
+
+:where(:root[data-site-theme="editorial"]) .entries > li {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  column-gap: 3rem;
+  padding: 1.6rem 0;
+}
+
+:where(:root[data-site-theme="editorial"]) .entries > li + li {
+  border-top: 1px solid var(--editorial-rule);
+}
+
+:where(:root[data-site-theme="editorial"]) .entries h3 {
+  font-size: clamp(1.45rem, 2.4vw, 1.9rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+:where(:root[data-site-theme="editorial"]) .entries .summary {
+  max-width: 62ch;
+}
+
+/* A post */
+
+:where(:root[data-site-theme="editorial"]) .story {
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+  border-bottom: 1px solid var(--editorial-rule);
+}
+
+:where(:root[data-site-theme="editorial"]) .story-head {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 9vw, 7rem) 0 clamp(2.5rem, 5vw, 3.5rem);
+  text-align: center;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-head h1 {
+  margin: 1.5rem 0 1.75rem;
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  line-height: 1.04;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-dek {
+  max-width: 38rem;
+  margin: 0 auto;
+  font: italic 400 clamp(1.2rem, 1.9vw, 1.45rem)/1.5 var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-soft);
+}
+
+:where(:root[data-site-theme="editorial"]) .byline {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.6rem 0;
+  border-block: 1px solid var(--editorial-rule);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--editorial-ink);
+}
+
+:where(:root[data-site-theme="editorial"]) .story-cover {
+  max-width: 68rem;
+  margin: 0 auto clamp(2.5rem, 6vw, 4rem);
+}
+
+:where(:root[data-site-theme="editorial"]) .story-cover img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--editorial-rule);
+}
+
+:where(:root[data-site-theme="editorial"]) .filed {
+  max-width: 40rem;
+  margin: 3rem auto 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--editorial-rule);
+  font: italic 400 1.05rem var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-soft);
+}
+
+:where(:root[data-site-theme="editorial"]) .filed .label {
+  font-style: normal;
+  margin-right: 0.6rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  padding: clamp(2.5rem, 6vw, 4rem) 0 0;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--editorial-rule-strong);
+  text-decoration: none;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-nav-link.next {
+  grid-column: 2;
+  text-align: right;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-nav-title {
+  font: 400 clamp(1.3rem, 2.2vw, 1.7rem)/1.25 var(--editorial-serif), Georgia, serif;
+  transition: color 0.2s;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-nav-link:hover .story-nav-title {
+  color: var(--editorial-acc);
+  font-style: italic;
+}
+
+:where(:root[data-site-theme="editorial"]) .story-all {
+  padding: 2.5rem 0 clamp(3rem, 7vw, 5rem);
+  font-size: 0.95rem;
+}
+
+/* Post body. The markup comes from components/site/PostContent. */
+
+:root:where([data-site-theme="editorial"]) {
+  --editorial-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --editorial-code-bg: #eee6d6;
+  --code-foreground: #1f1c18;
+  --code-background: transparent;
+  --code-token-keyword: #8c2f1e;
+  --code-token-string: #536322;
+  --code-token-string-expression: #536322;
+  --code-token-comment: #6e665a;
+  --code-token-function: #2c4a66;
+  --code-token-constant: #7a4512;
+  --code-token-parameter: #34302a;
+  --code-token-punctuation: #6e665a;
+  --code-token-link: #8c2f1e;
+}
+
+:root[data-color-scheme="dark"]:where([data-site-theme="editorial"]) {
+  --editorial-code-bg: #221f1b;
+  --code-foreground: #efe8db;
+  --code-token-keyword: #e48c73;
+  --code-token-string: #bdc781;
+  --code-token-string-expression: #bdc781;
+  --code-token-comment: #a99f8f;
+  --code-token-function: #9fbcd8;
+  --code-token-constant: #e2b47c;
+  --code-token-parameter: #d9d1c3;
+  --code-token-punctuation: #a99f8f;
+  --code-token-link: #e48c73;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose {
+  max-width: 40rem;
+  margin: 0 auto;
+  font: 400 clamp(1.1rem, 1.4vw, 1.22rem)/1.72 var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-text);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose > * + * {
+  margin-top: 1.3rem;
+}
+
+/* A drop cap on the opening paragraph, and an end mark on the last. */
+:where(:root[data-site-theme="editorial"]) .prose > p:first-child::first-letter {
+  float: left;
+  margin: 0.08em 0.1em 0 0;
+  font-size: 4.3em;
+  line-height: 0.78;
+  font-weight: 300;
+  color: var(--editorial-acc);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose > p:last-child::after {
+  content: "\00a0∎";
+  color: var(--editorial-acc);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose h2 {
+  margin-top: 3rem;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  scroll-margin-top: calc(var(--editorial-mast-h) + 1rem);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose h3 {
+  margin-top: 2.2rem;
+  font-size: 1.3rem;
+  font-style: italic;
+  font-weight: 400;
+  scroll-margin-top: calc(var(--editorial-mast-h) + 1rem);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose h4 {
+  margin-top: 2rem;
+  font: 500 0.75rem/1.5 var(--editorial-sans), system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--editorial-soft);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--editorial-link-line);
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose a:hover {
+  color: var(--editorial-acc);
+  text-decoration-color: currentColor;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose strong {
+  font-weight: 600;
+  color: var(--editorial-ink);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose code {
+  font: 0.8em var(--editorial-mono);
+  background: var(--editorial-code-bg);
+  padding: 0.1em 0.35em;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose ul,
+:where(:root[data-site-theme="editorial"]) .prose ol {
+  padding-left: 1.4rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose ul {
+  list-style: none;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose ul > li {
+  position: relative;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.25rem;
+  top: 0.85em;
+  width: 0.6rem;
+  height: 1px;
+  background: var(--editorial-acc);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose ol > li::marker {
+  font-style: italic;
+  color: var(--editorial-acc);
+}
+
+:where(:root[data-site-theme="editorial"]) .prose li + li {
+  margin-top: 0.45rem;
+}
+
+/* Quotes are set as pull quotes. */
+:where(:root[data-site-theme="editorial"]) .prose blockquote {
+  margin-block: 2.5rem;
+  padding: 1.5rem 0;
+  border-block: 1px solid var(--editorial-rule-strong);
+  font: italic 300 clamp(1.45rem, 2.6vw, 1.9rem)/1.35 var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-ink);
+  text-align: center;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose hr {
+  border: 0;
+  margin: 2.8rem 0;
+  text-align: center;
+}
+
+:where(:root[data-site-theme="editorial"]) .prose hr::after {
+  content: "⁂";
+  color: var(--editorial-acc);
+  font-size: 1.2rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .post-code {
+  margin-block: 2rem;
+  background: var(--editorial-code-bg);
+  border-top: 1px solid var(--editorial-rule-strong);
+}
+
+:where(:root[data-site-theme="editorial"]) .post-code-lang {
+  font: 500 0.68rem/1.5 var(--editorial-sans), system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--editorial-soft);
+  padding: 0.6rem 1.1rem 0;
+}
+
+:where(:root[data-site-theme="editorial"]) .post-code pre {
+  margin: 0;
+  padding: 0.7rem 1.1rem 1.1rem;
+  overflow-x: auto;
+  font: 0.82rem/1.65 var(--editorial-mono);
+  tab-size: 2;
+}
+
+:where(:root[data-site-theme="editorial"]) .post-code pre code {
+  font: inherit;
+  background: none;
+  padding: 0;
+}
+
+:where(:root[data-site-theme="editorial"]) .post-figure {
+  margin-block: 2.5rem;
+}
+
+:where(:root[data-site-theme="editorial"]) .post-figure img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--editorial-rule);
+}
+
+:where(:root[data-site-theme="editorial"]) .post-figure figcaption {
+  margin-top: 0.7rem;
+  font: italic 400 0.95rem/1.45 var(--editorial-serif), Georgia, serif;
+  color: var(--editorial-soft);
+  text-align: center;
+}
+
+@media (max-width: 1000px) {
+  :where(:root[data-site-theme="editorial"]) .dispatch {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  :where(:root[data-site-theme="editorial"]) .entries > li {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.2rem;
+  }
+
+  :where(:root[data-site-theme="editorial"]) .blog-feed {
+    justify-self: start;
+  }
+
+  :where(:root[data-site-theme="editorial"]) .story-nav {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  :where(:root[data-site-theme="editorial"]) .story-nav-link.next {
+    grid-column: auto;
+    text-align: left;
+  }
+}

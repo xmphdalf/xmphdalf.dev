@@ -1,9 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import type React from "react";
 
 import {
   displayUrl,
   endYearOf,
+  formatDay,
   formatMonthOrYear,
   formatRange,
   formatSpan,
@@ -12,12 +14,14 @@ import {
   paragraphs,
   startYearOf,
 } from "@/lib/format";
+import { postPath, readingLabel } from "@/lib/posts";
 import { asMedia } from "@/lib/profile";
-import { SITE_URL } from "@/lib/site";
 import type { Profile } from "@/payload-types";
 
+import type { HomeProps } from "..";
 import { fontVariables } from "./fonts";
-import { Masthead, type NavLink } from "./Masthead";
+import { Masthead } from "./Masthead";
+import { editorialSections, profileLinks, ROMAN } from "./sections";
 import "./editorial.css";
 
 const availabilityText: Record<Profile["availability"], string | null> = {
@@ -29,7 +33,8 @@ const availabilityText: Record<Profile["availability"], string | null> = {
 
 const newTab = { target: "_blank", rel: "noopener noreferrer" } as const;
 
-const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+/** How many posts the home page lists: one lead story and a short contents list. */
+const HOME_POSTS = 5;
 
 function External({ href, className, children }: { href: string; className?: string; children: React.ReactNode }) {
   return (
@@ -89,7 +94,7 @@ function SectionHead({ id, no, title }: { id: string; no: string; title: string 
 }
 
 /** The editorial design: the whole public page, rendered from the Profile. */
-export default function EditorialTheme({ profile }: { profile: Profile }) {
+export default function EditorialTheme({ profile, posts }: HomeProps) {
   const experience = profile.experience ?? [];
   const clients = profile.clients ?? [];
   const skills = (profile.skills ?? []).filter((group) => group.items?.length);
@@ -111,15 +116,7 @@ export default function EditorialTheme({ profile }: { profile: Profile }) {
     experience.some((role) => role.current) ? ONGOING : Number.isFinite(lastYear) ? String(lastYear) : null,
   );
 
-  const links = [
-    { label: "GitHub", url: profile.github },
-    { label: "LinkedIn", url: profile.linkedin },
-    { label: "Credly", url: profile.credly },
-    {
-      label: "Website",
-      url: profile.website && profile.website.replace(/\/$/, "") !== SITE_URL ? profile.website : null,
-    },
-  ].filter((link): link is { label: string; url: string } => Boolean(link.url));
+  const links = profileLinks(profile);
 
   // The cover repeats the main profile links, like the terminal design's intro.
   const coverLinks = [
@@ -127,16 +124,7 @@ export default function EditorialTheme({ profile }: { profile: Profile }) {
     ...(resume ? [{ label: "Resume", url: resume.url }] : []),
   ];
 
-  const hasContact = Boolean(profile.email) || links.length > 0;
-  const sections: NavLink[] = [
-    ...(experience.length ? [{ id: "experience", label: "Experience" }] : []),
-    ...(clients.length ? [{ id: "clients", label: "Client work" }] : []),
-    ...(skills.length ? [{ id: "stack", label: "Stack" }] : []),
-    ...(certifications.length || education.length || languages.length
-      ? [{ id: "credentials", label: "Credentials" }]
-      : []),
-    ...(hasContact ? [{ id: "contact", label: "Contact" }] : []),
-  ];
+  const sections = editorialSections(profile, posts.length > 0);
   const numberOf = (id: string) => ROMAN[sections.findIndex((section) => section.id === id)] ?? "";
   const has = (id: string) => sections.some((section) => section.id === id);
 
@@ -292,6 +280,50 @@ export default function EditorialTheme({ profile }: { profile: Profile }) {
                 );
               })}
             </ul>
+          </section>
+        ) : null}
+
+        {has("writing") ? (
+          <section id="writing" className="block" aria-labelledby="writing-title">
+            <SectionHead id="writing" no={numberOf("writing")} title="Writing" />
+            <div className="dispatch">
+              {posts.slice(0, 1).map((post) => (
+                <article key={post.id} className="lead-story">
+                  <p className="label">
+                    {[formatDay(post.publishedAt), readingLabel(post.readingMinutes)].filter(Boolean).join(" · ")}
+                  </p>
+                  <h3>
+                    <Link className="story-link" href={postPath(post.slug)}>
+                      {post.title}
+                    </Link>
+                  </h3>
+                  {post.excerpt ? <p className="lead-dek">{post.excerpt}</p> : null}
+                </article>
+              ))}
+              {posts.length > 1 ? (
+                <div className="contents-wrap">
+                  <p className="label">Also</p>
+                  <ol className="contents">
+                    {posts.slice(1, HOME_POSTS).map((post) => (
+                      <li key={post.id}>
+                        <Link className="contents-row" href={postPath(post.slug)}>
+                          <span className="contents-title">{post.title}</span>
+                          <span className="contents-leader" aria-hidden="true" />
+                          <span className="contents-mins">{readingLabel(post.readingMinutes, "min")}</span>
+                        </Link>
+                        <p className="contents-date">{formatDay(post.publishedAt)}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ) : null}
+            </div>
+            <p className="more">
+              <Link className="u" href="/blog">
+                {posts.length === 1 ? "Read on the blog" : `All ${posts.length} pieces`}
+                <span aria-hidden="true"> →</span>
+              </Link>
+            </p>
           </section>
         ) : null}
 

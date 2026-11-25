@@ -1,11 +1,23 @@
 import { THEMES, type ThemeId } from "@/themes/manifest";
 
+type Props = {
+  theme: ThemeId;
+  previewed: boolean;
+  /** Set on a post page, where Draft Mode also shows the post's latest draft. */
+  draftPost?: boolean;
+};
+
 /**
  * Shown whenever Draft Mode is on, so an admin can always get out of it.
  * Rendered outside the design so it looks the same in every one.
  */
-export default function PreviewBanner({ theme, previewed }: { theme: ThemeId; previewed: boolean }) {
+export default function PreviewBanner({ theme, previewed, draftPost = false }: Props) {
   const label = THEMES.find((item) => item.id === theme)?.label ?? theme;
+  const message = draftPost
+    ? `Previewing the latest draft of this post in the ${label} design. Visitors see the published version.`
+    : previewed
+      ? `Previewing the ${label} design. Visitors don’t see this.`
+      : `Preview mode is on, showing the live ${label} design.`;
   return (
     <form
       method="post"
@@ -30,11 +42,7 @@ export default function PreviewBanner({ theme, previewed }: { theme: ThemeId; pr
         boxShadow: "0 4px 16px rgba(0,0,0,.3)",
       }}
     >
-      <span>
-        {previewed
-          ? `Previewing the ${label} design. Visitors don’t see this.`
-          : `Preview mode is on, showing the live ${label} design.`}
-      </span>
+      <span>{message}</span>
       <button
         type="submit"
         style={{ border: 0, borderRadius: 999, padding: "6px 12px", background: "#fff", color: "#111", font: "inherit", cursor: "pointer" }}

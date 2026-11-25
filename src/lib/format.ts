@@ -74,14 +74,39 @@ export function displayUrl(url: string): string {
   return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 }
 
-/** Lowercase, hyphenated, for the header path, e.g. "mihir-lathiya". */
+/** Lowercase, hyphenated, for paths and post addresses, e.g. "mihir-lathiya". */
 export function slugify(value: string): string {
   return value
     .toLowerCase()
     .normalize("NFKD")
     .replace(/[^\w\s-]/g, "")
     .trim()
-    .replace(/[\s_]+/g, "-");
+    .replace(/[\s_]+/g, "-")
+    .replace(/-{2,}/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+
+/** "25 Nov 2026" from a stored date, else nothing. */
+export function formatDay(date?: string | null): string | null {
+  if (!date) return null;
+  const parsed = new Date(date);
+  return isValidDate(parsed) ? day.format(parsed) : null;
+}
+
+/** "2026-11-25" from a stored date, for <time dateTime> and mono layouts. */
+export function isoDay(date?: string | null): string | null {
+  if (!date) return null;
+  const parsed = new Date(date);
+  return isValidDate(parsed) ? parsed.toISOString().slice(0, 10) : null;
+}
+
+/** Year of a stored date, for grouping posts. */
+export function yearOf(date?: string | null): number | null {
+  if (!date) return null;
+  const parsed = new Date(date);
+  return isValidDate(parsed) ? parsed.getUTCFullYear() : null;
 }
 
 /** Bio text split on blank lines. */

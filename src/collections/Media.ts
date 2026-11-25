@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { anyone, authenticated } from "../access/authenticated";
+import { revalidateMediaAfterChange, revalidateMediaAfterDelete } from "../hooks/revalidateMedia";
 
 // Files are stored on local disk for now. On Railway that disk is wiped on
 // every deploy, so move this to an S3-compatible bucket before relying on it.
@@ -17,6 +18,10 @@ export const Media: CollectionConfig = {
     defaultColumns: ["filename", "alt", "mimeType", "updatedAt"],
   },
   versions: false,
+  hooks: {
+    afterChange: [revalidateMediaAfterChange],
+    afterDelete: [revalidateMediaAfterDelete],
+  },
   upload: {
     mimeTypes: ["image/*", "application/pdf"],
   },
