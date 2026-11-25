@@ -10,9 +10,10 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { blogJsonLd, jsonLdScript } from "@/lib/structuredData";
 import { THEME_COMPONENTS } from "@/themes";
 
-// Rendered on first request and cached, like the home page. Publishing,
-// editing or unpublishing a post regenerates it.
-export const revalidate = 86400;
+// Rendered on request: this is a static route, so without this Next would
+// render it during the build, where the database isn't reachable. The posts
+// come from the data cache (cleared on publish), so this stays cheap.
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [profile, posts] = await Promise.all([getProfile(), getPublishedPosts()]);
