@@ -4,6 +4,8 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 
 import { colorSchemeInitScript } from "@/lib/colorScheme";
 import { summary } from "@/lib/format";
+import { feedLinks } from "@/lib/metadata";
+import { getPublishedPosts } from "@/lib/posts";
 import { getProfile } from "@/lib/profile";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getRenderedTheme } from "@/lib/appearance";
@@ -26,7 +28,7 @@ const plexMono = IBM_Plex_Mono({
 
 // Defined here, next to opengraph-image.tsx, so the generated image is used.
 export async function generateMetadata(): Promise<Metadata> {
-  const profile = await getProfile();
+  const [profile, posts] = await Promise.all([getProfile(), getPublishedPosts()]);
   const title = profile.headline ? `${profile.name} — ${profile.headline}` : profile.name;
   const description = summary(profile.bio) ?? profile.headline ?? undefined;
 
@@ -34,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title,
     description,
-    alternates: { canonical: "/" },
+    alternates: { canonical: "/", types: feedLinks(profile.name, posts.length > 0) },
     icons: { icon: "/favicon.ico" },
     openGraph: {
       type: "profile",

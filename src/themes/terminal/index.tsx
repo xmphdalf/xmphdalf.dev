@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   displayUrl,
@@ -6,17 +7,21 @@ import {
   formatMonthOrYear,
   formatRange,
   formatSpan,
+  isoDay,
   normalizeRange,
   ONGOING,
   paragraphs,
   slugify,
   startYearOf,
 } from "@/lib/format";
+import { postPath, readingLabel } from "@/lib/posts";
 import { asMedia } from "@/lib/profile";
 import { SITE_URL } from "@/lib/site";
 import type { Profile } from "@/payload-types";
 
-import { SiteChrome, type SectionLink } from "./SiteChrome";
+import type { HomeProps } from "..";
+import { chromeLinks, terminalSections } from "./sections";
+import { SiteChrome } from "./SiteChrome";
 import "./terminal.css";
 
 const availabilityText: Record<Profile["availability"], string | null> = {
@@ -58,8 +63,11 @@ function languageLine(languages: NonNullable<Profile["languages"]>): string {
   return groups.map((g) => `${g.names.join(", ")}${g.level ? ` (${g.level})` : ""}`).join(" · ");
 }
 
+/** How many posts the home page lists. */
+const HOME_POSTS = 5;
+
 /** The terminal design: the whole public page, rendered from the Profile. */
-export default function TerminalTheme({ profile }: { profile: Profile }) {
+export default function TerminalTheme({ profile, posts }: HomeProps) {
   const experience = profile.experience ?? [];
   const clients = profile.clients ?? [];
   const skills = (profile.skills ?? []).filter((group) => group.items?.length);
@@ -81,18 +89,7 @@ export default function TerminalTheme({ profile }: { profile: Profile }) {
     experience.some((role) => role.current) ? ONGOING : Number.isFinite(lastYear) ? String(lastYear) : null,
   );
 
-  const sections: SectionLink[] = [
-    { id: "readme", file: "README.md" },
-    ...(experience.length ? [{ id: "experience", file: "experience.log" }] : []),
-    ...(clients.length ? [{ id: "clients", file: "client-work.md" }] : []),
-    ...(skills.length ? [{ id: "stack", file: "stack.json" }] : []),
-    ...(certifications.length || education.length || languages.length
-      ? [{ id: "credentials", file: "credentials.md" }]
-      : []),
-    ...(profile.email || profile.github || profile.linkedin || profile.credly
-      ? [{ id: "contact", file: "contact.sh" }]
-      : []),
-  ];
+  const sections = terminalSections(profile, posts.length > 0);
   const has = (id: string) => sections.some((section) => section.id === id);
 
   const companyLink = (role: { company: string; companyUrl?: string | null }) =>
@@ -119,13 +116,8 @@ export default function TerminalTheme({ profile }: { profile: Profile }) {
     <SiteChrome
       path={slugify(profile.name)}
       sections={sections}
-      links={{
-        email: profile.email,
-        github: profile.github,
-        linkedin: profile.linkedin,
-        credly: profile.credly,
-        resume: resume?.url,
-      }}
+      posts={posts}
+      links={chromeLinks(profile, resume?.url)}
     >
       <main id="main" className="main">
         <section id="readme" className="pane hero" aria-labelledby="readme-title">
@@ -270,6 +262,37 @@ export default function TerminalTheme({ profile }: { profile: Profile }) {
                 </li>
               ))}
             </ul>
+          </section>
+        ) : null}
+
+        {has("writing") ? (
+          <section id="writing" className="pane" aria-labelledby="writing-title">
+            <p className="tab mono">writing.log</p>
+            <h2 id="writing-title">Writing</h2>
+            <ul className="log posts">
+              {posts.slice(0, HOME_POSTS).map((post) => (
+                <li key={post.id}>
+                  <time className="mono when" dateTime={post.publishedAt ?? undefined}>
+                    {isoDay(post.publishedAt)}
+                  </time>
+                  <div>
+                    <h3>
+                      <Link className="co" href={postPath(post.slug)}>
+                        {post.title}
+                      </Link>
+                    </h3>
+                    {post.excerpt ? <p className="summary">{post.excerpt}</p> : null}
+                  </div>
+                  <span className="mono mins">{readingLabel(post.readingMinutes, "min")}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mono more">
+              <span className="muted">$</span>{" "}
+              <Link href="/blog">
+                cd blog/ <span className="muted">→ {posts.length === 1 ? "1 post" : `all ${posts.length} posts`}</span>
+              </Link>
+            </p>
           </section>
         ) : null}
 

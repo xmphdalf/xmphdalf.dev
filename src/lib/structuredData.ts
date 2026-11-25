@@ -1,5 +1,6 @@
 import type { Profile } from "../payload-types";
 import { summary } from "./format";
+import { BLOG_PATH, postPath, type PostSummary } from "./posts";
 import { asMedia } from "./profile";
 import { SITE_NAME, SITE_URL } from "./site";
 
@@ -77,6 +78,52 @@ export function profileJsonLd(profile: Profile) {
         mainEntity: person,
       },
     ],
+  };
+}
+
+/** The author as a short Person node, pointing at the full one on the home page. */
+const authorNode = (profile: Profile) => ({ "@type": "Person", "@id": `${SITE_URL}/#person`, name: profile.name, url: SITE_URL });
+
+/** schema.org Blog for the blog index, listing every published post. */
+export function blogJsonLd(profile: Profile, posts: PostSummary[]) {
+  const url = absolute(BLOG_PATH);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${url}#blog`,
+    url,
+    name: `${profile.name} — Blog`,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    author: authorNode(profile),
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      url: absolute(postPath(post.slug)),
+      datePublished: post.publishedAt ?? undefined,
+      dateModified: post.updatedAt ?? undefined,
+    })),
+  };
+}
+
+/** schema.org BlogPosting for one post. */
+export function postJsonLd(profile: Profile, post: PostSummary) {
+  const url = absolute(postPath(post.slug));
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${url}#post`,
+    url,
+    mainEntityOfPage: url,
+    headline: post.title,
+    description: post.excerpt ?? undefined,
+    image: post.cover ? absolute(post.cover.url) : undefined,
+    datePublished: post.publishedAt ?? undefined,
+    dateModified: post.updatedAt ?? undefined,
+    keywords: post.tags?.length ? post.tags.join(", ") : undefined,
+    timeRequired: post.readingMinutes ? `PT${post.readingMinutes}M` : undefined,
+    author: authorNode(profile),
+    publisher: authorNode(profile),
+    isPartOf: { "@id": `${absolute(BLOG_PATH)}#blog` },
   };
 }
 

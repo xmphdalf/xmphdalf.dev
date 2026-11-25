@@ -844,3 +844,424 @@ html:where([data-site-theme="terminal"]) {
     display: none;
   }
 }
+
+/* Header path links home */
+
+:where(:root[data-site-theme="terminal"]) a.path {
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+:where(:root[data-site-theme="terminal"]) a.path:hover {
+  color: var(--ink);
+}
+
+/* Blog folder in the tree */
+
+:where(:root[data-site-theme="terminal"]) .tree .tree-dir {
+  margin-top: 0.9rem;
+  padding-left: 0.7rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .tree .tree-dir::before {
+  display: none;
+}
+
+:where(:root[data-site-theme="terminal"]) .tree .tree-file {
+  padding-left: 2.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:where(:root[data-site-theme="terminal"]) .tree .tree-file::before {
+  left: 1.4rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .tree a[aria-current="page"] {
+  color: var(--ink);
+  background: var(--panel);
+}
+
+:where(:root[data-site-theme="terminal"]) .tree .tree-file[aria-current="page"]::before {
+  background: var(--acc);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-top: -3px;
+  left: 1.3rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .tree .tree-more {
+  font-style: italic;
+}
+
+:where(:root[data-site-theme="terminal"]) .pal-list li b i {
+  display: block;
+  font: 400 0.75rem var(--sans);
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Post lists: date, title and excerpt, reading time */
+
+:where(:root[data-site-theme="terminal"]) .posts > li {
+  grid-template-columns: 9.5rem minmax(0, 1fr) auto;
+  align-items: baseline;
+}
+
+:where(:root[data-site-theme="terminal"]) .posts h3 a {
+  border-bottom-color: transparent;
+}
+
+:where(:root[data-site-theme="terminal"]) .posts h3 a:hover {
+  border-bottom-color: var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .mins {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+:where(:root[data-site-theme="terminal"]) .more {
+  margin-top: 1.6rem;
+  font-size: 0.85rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .more a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .more a:hover {
+  color: var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .blog-hero h1 {
+  margin-bottom: 1.2rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .blog-hero .facts {
+  justify-content: space-between;
+  align-items: baseline;
+  color: var(--muted);
+}
+
+/* A post */
+
+:where(:root[data-site-theme="terminal"]) .post {
+  padding-top: 6rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .post h1 {
+  font-size: clamp(2.1rem, 4.6vw, 3.1rem);
+  line-height: 1.12;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.2rem;
+  font-size: 0.8rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-tag {
+  color: var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .post-cover {
+  width: 100%;
+  height: auto;
+  margin-top: 2.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-eof {
+  margin-top: 3.5rem;
+  font-size: 0.75rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 2rem;
+  padding: 3rem 0;
+  font-size: 0.85rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-decoration: none;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  transition: border-color 0.2s;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav-link b {
+  font: 500 1rem/1.4 var(--sans);
+  color: var(--ink);
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav-link:hover {
+  border-color: var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav-link.next {
+  text-align: right;
+  grid-column: 2;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav-up {
+  grid-column: 1 / -1;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-nav-up a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--acc);
+}
+
+/* Post body. The markup comes from components/site/PostContent. */
+
+:where(:root[data-site-theme="terminal"]) {
+  --code-foreground: var(--ink);
+  --code-background: transparent;
+  --code-token-keyword: #4f6e52;
+  --code-token-string: #8a5a2b;
+  --code-token-string-expression: #8a5a2b;
+  --code-token-comment: #6b6860;
+  --code-token-function: #36608a;
+  --code-token-constant: #94466a;
+  --code-token-parameter: #3d3b37;
+  --code-token-punctuation: #6b6860;
+  --code-token-link: #4f6e52;
+}
+
+:root[data-color-scheme="dark"]:where([data-site-theme="terminal"]) {
+  --code-token-keyword: #8fb592;
+  --code-token-string: #d9a066;
+  --code-token-string-expression: #d9a066;
+  --code-token-comment: #a19d93;
+  --code-token-function: #8fb3d9;
+  --code-token-constant: #d79bb5;
+  --code-token-parameter: #d6d2c8;
+  --code-token-punctuation: #a19d93;
+  --code-token-link: #8fb592;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose {
+  margin-top: 3rem;
+  max-width: 68ch;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text2);
+}
+
+:where(:root[data-site-theme="terminal"]) .prose > * + * {
+  margin-top: 1.25rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h2,
+:where(:root[data-site-theme="terminal"]) .prose h3,
+:where(:root[data-site-theme="terminal"]) .prose h4 {
+  color: var(--ink);
+  scroll-margin-top: calc(var(--top-h) + 1rem);
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h2 {
+  font: 500 1.55rem/1.3 var(--sans);
+  letter-spacing: -0.015em;
+  margin: 3rem 0 0;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h3 {
+  font: 600 1.15rem/1.4 var(--sans);
+  margin-top: 2.2rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h4 {
+  font: 600 1rem/1.4 var(--sans);
+  margin-top: 1.8rem;
+}
+
+/* Markdown-style markers in the margin, like the source of the file. */
+:where(:root[data-site-theme="terminal"]) .prose h2::before,
+:where(:root[data-site-theme="terminal"]) .prose h3::before,
+:where(:root[data-site-theme="terminal"]) .prose h4::before {
+  font: 400 0.8em var(--mono);
+  color: var(--acc);
+  margin-right: 0.5em;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h2::before {
+  content: "##";
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h3::before {
+  content: "###";
+}
+
+:where(:root[data-site-theme="terminal"]) .prose h4::before {
+  content: "####";
+}
+
+:where(:root[data-site-theme="terminal"]) .prose a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--acc);
+  transition: color 0.2s;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose a:hover {
+  color: var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .prose strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+:where(:root[data-site-theme="terminal"]) .prose code {
+  font: 0.86em var(--mono);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.08em 0.35em;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose ul,
+:where(:root[data-site-theme="terminal"]) .prose ol {
+  padding-left: 1.4rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose ul {
+  list-style: none;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose ul > li {
+  position: relative;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose ul > li::before {
+  content: "–";
+  position: absolute;
+  left: -1.1rem;
+  color: var(--muted);
+}
+
+:where(:root[data-site-theme="terminal"]) .prose ol > li::marker {
+  font: 0.85em var(--mono);
+  color: var(--acc);
+}
+
+:where(:root[data-site-theme="terminal"]) .prose li + li,
+:where(:root[data-site-theme="terminal"]) .prose li > ul,
+:where(:root[data-site-theme="terminal"]) .prose li > ol {
+  margin-top: 0.4rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose blockquote {
+  border-left: 2px solid var(--acc);
+  padding: 0.2rem 0 0.2rem 1.2rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+:where(:root[data-site-theme="terminal"]) .prose hr {
+  border: 0;
+  border-top: 1px dashed var(--line);
+  margin: 2.5rem 0;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-code {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  overflow: hidden;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-code-lang {
+  font: 0.72rem var(--mono);
+  color: var(--muted);
+  padding: 0.4rem 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+:where(:root[data-site-theme="terminal"]) .post-code pre {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  font: 0.85rem/1.65 var(--mono);
+  tab-size: 2;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-code pre code {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-figure {
+  margin-block: 2.2rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-figure img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-figure figcaption {
+  font: 0.75rem var(--mono);
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .post-figure figcaption::before {
+  content: "// ";
+  color: var(--acc);
+}
+
+@media (max-width: 600px) {
+  :where(:root[data-site-theme="terminal"]) .posts > li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+
+  :where(:root[data-site-theme="terminal"]) .post {
+    padding-top: 3.5rem;
+  }
+
+  :where(:root[data-site-theme="terminal"]) .post-nav {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  :where(:root[data-site-theme="terminal"]) .post-nav-link.next {
+    grid-column: auto;
+    text-align: left;
+  }
+}
+
+:where(:root[data-site-theme="terminal"]) .blog-hero {
+  padding-bottom: 3rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .pane.year {
+  padding: 3rem 0 2.5rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .pane.year .tab {
+  margin-bottom: 0.5rem;
+}
+
+:where(:root[data-site-theme="terminal"]) .pane.year .log {
+  margin-top: 1rem;
+}

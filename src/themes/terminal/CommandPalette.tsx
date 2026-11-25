@@ -2,7 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 
-export type Command = { label: string; hint: string; run: () => void };
+/** `keywords` are matched as well as the label, e.g. a post's title. */
+export type Command = { label: string; hint: string; keywords?: string; run: () => void };
 
 type Props = {
   open: boolean;
@@ -17,8 +18,9 @@ export function CommandPalette({ open, onClose, commands }: Props) {
   const [selected, setSelected] = useState(0);
   const listId = useId();
 
+  const needle = query.trim().toLowerCase();
   const shown = commands.filter((command) =>
-    command.label.toLowerCase().includes(query.trim().toLowerCase()),
+    `${command.label} ${command.keywords ?? ""}`.toLowerCase().includes(needle),
   );
   const current = Math.min(selected, Math.max(0, shown.length - 1));
 
@@ -76,8 +78,8 @@ export function CommandPalette({ open, onClose, commands }: Props) {
         aria-expanded="true"
         aria-controls={listId}
         aria-activedescendant={shown.length ? `${listId}-${current}` : undefined}
-        aria-label="Type a section or action"
-        placeholder="Type a section or action…"
+        aria-label="Type a section, post or action"
+        placeholder="Type a section, post or action…"
         autoComplete="off"
         spellCheck={false}
         value={query}
@@ -98,7 +100,10 @@ export function CommandPalette({ open, onClose, commands }: Props) {
               onClick={() => run(index)}
               onMouseMove={() => index !== current && setSelected(index)}
             >
-              <b>{command.label}</b>
+              <b>
+                {command.label}
+                {command.keywords ? <i>{command.keywords}</i> : null}
+              </b>
               <span>{command.hint}</span>
             </li>
           ))

@@ -1,30 +1,28 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   displayUrl,
   endYearOf,
   formatMonthOrYear,
   formatRange,
+  formatDay,
   formatSpan,
   normalizeRange,
   ONGOING,
   paragraphs,
   startYearOf,
 } from "@/lib/format";
+import { postPath, readingLabel } from "@/lib/posts";
 import { asMedia } from "@/lib/profile";
 import { SITE_URL } from "@/lib/site";
 import type { Profile } from "@/payload-types";
 
-import { ColorSchemeToggle } from "./ColorSchemeToggle";
+import type { HomeProps } from "..";
+import { Bar, boldSections, sectionNumber } from "./Bar";
 import { fontVariables } from "./fonts";
 import "./bold.css";
 
-const availabilityText: Record<Profile["availability"], string | null> = {
-  roles: "Open to roles",
-  freelance: "Open to freelance",
-  both: "Open to roles & freelance",
-  notLooking: null,
-};
 
 const newTab = { target: "_blank", rel: "noopener noreferrer" } as const;
 
@@ -66,10 +64,11 @@ function splitName(name: string): { lead: string; last: string | null } {
   return { lead: words.slice(0, -1).join(" "), last: words[words.length - 1] };
 }
 
-type Section = { id: string; label: string };
+/** How many posts the home page lists. */
+const HOME_POSTS = 4;
 
 /** The bold design: oversized type, numbered sections, one accent colour. */
-export default function BoldTheme({ profile }: { profile: Profile }) {
+export default function BoldTheme({ profile, posts }: HomeProps) {
   const experience = profile.experience ?? [];
   const clients = profile.clients ?? [];
   const skills = (profile.skills ?? []).filter((group) => group.items?.length);
@@ -79,7 +78,6 @@ export default function BoldTheme({ profile }: { profile: Profile }) {
   const photo = asMedia(profile.photo);
   const resume = asMedia(profile.resume);
   const bio = paragraphs(profile.bio);
-  const status = availabilityText[profile.availability];
   const { lead, last } = splitName(profile.name);
 
   const current = experience.find((role) => role.current) ?? experience[0];
@@ -103,16 +101,8 @@ export default function BoldTheme({ profile }: { profile: Profile }) {
     { label: "Résumé", url: resume?.url },
   ].filter((link): link is { label: string; url: string } => Boolean(link.url));
 
-  const sections: Section[] = [
-    ...(experience.length ? [{ id: "experience", label: "Experience" }] : []),
-    ...(clients.length ? [{ id: "clients", label: "Client work" }] : []),
-    ...(skills.length ? [{ id: "stack", label: "Stack" }] : []),
-    ...(certifications.length || education.length || languages.length
-      ? [{ id: "credentials", label: "Credentials" }]
-      : []),
-    ...(profile.email || contactLinks.length ? [{ id: "contact", label: "Contact" }] : []),
-  ];
-  const number = (id: string) => String(sections.findIndex((section) => section.id === id) + 1).padStart(2, "0");
+  const sections = boldSections(profile, posts.length > 0, contactLinks.length > 0);
+  const number = (id: string) => sectionNumber(sections, id);
   const has = (id: string) => sections.some((section) => section.id === id);
 
   const sectionHead = (id: string, label: string, note?: React.ReactNode) => (
@@ -134,29 +124,7 @@ export default function BoldTheme({ profile }: { profile: Profile }) {
         Skip to content
       </a>
 
-      <header className="bar">
-        <a className="mark" href="#top">
-          {lead.split(/\s+/)[0]}
-          <span>.</span>
-        </a>
-        {sections.length ? (
-          <nav className="nav" aria-label="Sections">
-            {sections.map((section) => (
-              <a key={section.id} href={`#${section.id}`}>
-                <i>{number(section.id)}</i>
-                {section.label}
-              </a>
-            ))}
-          </nav>
-        ) : null}
-        {status ? (
-          <p className="status mono">
-            <b aria-hidden="true" />
-            {status}
-          </p>
-        ) : null}
-        <ColorSchemeToggle />
-      </header>
+      <Bar profile={profile} sections={sections} />
 
       <main id="main">
         <section id="top" className="hero grid" aria-labelledby="hero-title">
@@ -302,6 +270,38 @@ export default function BoldTheme({ profile }: { profile: Profile }) {
                 </li>
               ))}
             </ul>
+          </section>
+        ) : null}
+
+        {has("writing") ? (
+          <section id="writing" className="stage" aria-labelledby="writing-title">
+            {sectionHead(
+              "writing",
+              "Writing",
+              <Link className="link" href="/blog">
+                {posts.length === 1 ? "The post" : `All ${posts.length} posts`} →
+              </Link>,
+            )}
+            <ol className="posts">
+              {posts.slice(0, HOME_POSTS).map((post) => (
+                <li key={post.id} className="post-row">
+                  <time className="mono dim post-date" dateTime={post.publishedAt ?? undefined}>
+                    {formatDay(post.publishedAt)}
+                  </time>
+                  <h3 className="post-title">
+                    <Link href={postPath(post.slug)}>
+                      {post.title}
+                      <span className="arrow" aria-hidden="true">
+                        {" "}
+                        →
+                      </span>
+                    </Link>
+                  </h3>
+                  <span className="mono dim post-mins">{readingLabel(post.readingMinutes)}</span>
+                  {post.excerpt ? <p className="post-excerpt">{post.excerpt}</p> : null}
+                </li>
+              ))}
+            </ol>
           </section>
         ) : null}
 

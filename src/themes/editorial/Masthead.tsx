@@ -4,10 +4,13 @@ import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 import { applyColorScheme, currentColorScheme, savedColorScheme, type ColorScheme } from "@/lib/colorScheme";
 
-export type NavLink = { id: string; label: string };
+/** A section of the home page, or a page (`href`), marked `current` when open. */
+export type NavLink = { id: string; label: string; href?: string; current?: boolean };
 
 type Props = {
   name: string;
+  /** Where the name links: the top of the page at home, the home page elsewhere. */
+  homeHref?: string;
   sections: NavLink[];
   email?: string | null;
 };
@@ -20,7 +23,7 @@ const subscribeColorScheme = (onChange: () => void) => {
 };
 
 /** Sticky masthead: name, section links, email and the light/dark switch. */
-export function Masthead({ name, sections, email }: Props) {
+export function Masthead({ name, homeHref = "#top", sections, email }: Props) {
   const colorScheme = useSyncExternalStore(subscribeColorScheme, currentColorScheme, () => "light" as ColorScheme);
   const [menuOpen, setMenuOpen] = useState(false);
   const dark = colorScheme === "dark";
@@ -53,14 +56,20 @@ export function Masthead({ name, sections, email }: Props) {
   return (
     <header className="mast">
       <div className="mast-inner">
-        <a className="wordmark" href="#top">
+        <a className="wordmark" href={homeHref}>
           {name}
         </a>
         <div className="mast-tools">
           {hasNav ? (
             <nav id="editorial-nav" className={menuOpen ? "nav open" : "nav"} aria-label="Sections">
-              {sections.map(({ id, label }) => (
-                <a key={id} className="u" href={`#${id}`} onClick={() => setMenuOpen(false)}>
+              {sections.map(({ id, label, href, current }) => (
+                <a
+                  key={id}
+                  className="u"
+                  href={href ?? `#${id}`}
+                  aria-current={current ? "page" : undefined}
+                  onClick={() => setMenuOpen(false)}
+                >
                   {label}
                 </a>
               ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 
 import { CommandPalette, type Command } from "./CommandPalette";
@@ -15,12 +16,26 @@ export type ChromeLinks = {
   resume?: string | null;
 };
 
+/** A post as a file in the tree. */
+export type PostFile = { slug: string; title: string };
+
+/** Which blog page is open, if any. */
+export type BlogLocation = { page: "index" } | { page: "post"; slug: string };
+
 type Props = {
   path: string;
+  /** The home page's sections. */
   sections: SectionLink[];
+  /** Published posts, newest first. The tree shows the latest few. */
+  posts?: PostFile[];
+  /** Set on blog pages; section links then point back to the home page. */
+  blog?: BlogLocation;
   links: ChromeLinks;
   children: ReactNode;
 };
+
+/** How many posts the tree lists before "all posts". */
+const TREE_POSTS = 6;
 
 /** Re-renders when the html data-color-scheme attribute changes. */
 const subscribeColorScheme = (onChange: () => void) => {
@@ -35,12 +50,18 @@ const shortcutLabel = () => (/Mac|iPhone|iPad/.test(navigator.userAgent) ? "⌘K
 
 const openExternal = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
 
-export function SiteChrome({ path, sections, links, children }: Props) {
+const postHref = (slug: string) => `/blog/${slug}`;
+
+export function SiteChrome({ path, sections, posts = [], blog, links, children }: Props) {
   const colorScheme = useSyncExternalStore(subscribeColorScheme, currentColorScheme, () => "light" as ColorScheme);
   const shortcut = useSyncExternalStore(noopSubscribe, shortcutLabel, () => "⌘K");
   const [menuOpen, setMenuOpen] = useState(false);
   const [paletteOpen, setPaletteOpen] = useState(false);
-  const [active, setActive] = useState<string | null>(sections[0]?.id ?? null);
+  const onHome = !blog;
+  const [active, setActive] = useState<string | null>(onHome ? (sections[0]?.id ?? null) : null);
+
+  const sectionHref = (id: string) => (onHome ? `#${id}` : `/#${id}`);
+  const currentSlug = blog?.page === "post" ? blog.slug : null;
 
   // Follow the system setting until the visitor picks light or dark.
   useEffect(() => {
@@ -69,18 +90,17 @@ export function SiteChrome({ path, sections, links, children }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Highlight the section in view and draw its tab underline.
+  // Highlight the section in view and draw its tab underline. Blog pages
+  // have no sections to follow, but their panes still draw the underline.
   useEffect(() => {
-    const panes = sections
-      .map(({ id }) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el));
+    const panes = [...document.querySelectorAll<HTMLElement>("#main .pane")];
 
     const spy = new IntersectionObserver(
       (entries) =>
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           entry.target.classList.add("seen");
-          setActive(entry.target.id);
+          if (sections.some((section) => section.id === entry.target.id)) setActive(entry.target.id);
         }),
       { rootMargin: "-40% 0px -55% 0px" },
     );
@@ -89,23 +109,23 @@ export function SiteChrome({ path, sections, links, children }: Props) {
       { threshold: 0.2 },
     );
     panes.forEach((pane) => {
-      spy.observe(pane);
+      if (onHome) spy.observe(pane);
       seen.observe(pane);
     });
     return () => {
       spy.disconnect();
       seen.disconnect();
     };
-  }, [sections]);
+  }, [sections, onHome]);
+
+  const go = (href: string) => () => {
+    location.href = href;
+  };
 
   const commands: Command[] = [
-    ...sections.map(({ id, file }) => ({
-      label: file,
-      hint: "go to",
-      run: () => {
-        location.hash = id;
-      },
-    })),
+    ...sections.map(({ id, file }) => ({ label: file, hint: "go to", run: go(sectionHref(id)) })),
+    ...(posts.length ? [{ label: "blog/", hint: "all posts", run: go("/blog") }] : []),
+    ...posts.map((post) => ({ label: `${post.slug}.md`, hint: "post", keywords: post.title, run: go(postHref(post.slug)) })),
     ...(links.email
       ? [{ label: "Send email", hint: "action", run: () => (location.href = `mailto:${links.email}`) }]
       : []),
@@ -113,7 +133,11 @@ export function SiteChrome({ path, sections, links, children }: Props) {
     ...(links.linkedin ? [{ label: "Open LinkedIn", hint: "link", run: () => openExternal(links.linkedin!) }] : []),
     ...(links.credly ? [{ label: "Open Credly", hint: "link", run: () => openExternal(links.credly!) }] : []),
     ...(links.resume ? [{ label: "Open resume", hint: "link", run: () => openExternal(links.resume!) }] : []),
+    ...(posts.length ? [{ label: "Open RSS feed", hint: "link", run: go("/blog/feed.xml") }] : []),
     { label: "Toggle light/dark mode", hint: "action", run: toggleColorScheme },
+    ...(blog
+      ? [{ label: "Copy link to this page", hint: "action", run: () => void navigator.clipboard?.writeText(location.href) }]
+      : []),
     ...(links.email
       ? [
           {
@@ -127,6 +151,12 @@ export function SiteChrome({ path, sections, links, children }: Props) {
 
   const dark = colorScheme === "dark";
 
+  // Keep the open post in the tree even when it's older than the latest few.
+  const treePosts = posts.slice(0, TREE_POSTS);
+  const openPost = currentSlug ? posts.find((post) => post.slug === currentSlug) : undefined;
+  if (openPost && !treePosts.includes(openPost)) treePosts.push(openPost);
+  const hidden = posts.length - treePosts.length;
+
   return (
     <>
       <a className="skip" href="#main">
@@ -134,7 +164,9 @@ export function SiteChrome({ path, sections, links, children }: Props) {
       </a>
       <div className="app">
         <header className="top">
-          <span className="mono path">~/{path}</span>
+          <Link className="mono path" href="/">
+            ~/{path}
+          </Link>
           <button
             className="kbd-btn"
             type="button"
@@ -175,18 +207,47 @@ export function SiteChrome({ path, sections, links, children }: Props) {
         </header>
 
         <aside className={menuOpen ? "side open" : "side"}>
-          <nav id="tree" className="tree mono" aria-label="Sections">
+          <nav id="tree" className="tree mono" aria-label="Site">
             <p className="tree-root">▾ portfolio/</p>
             {sections.map(({ id, file }) => (
               <a
                 key={id}
-                href={`#${id}`}
-                aria-current={active === id ? "true" : undefined}
+                href={sectionHref(id)}
+                aria-current={onHome && active === id ? "true" : undefined}
                 onClick={() => setMenuOpen(false)}
               >
                 {file}
               </a>
             ))}
+            {posts.length ? (
+              <>
+                <Link
+                  className="tree-dir"
+                  href="/blog"
+                  aria-current={blog?.page === "index" ? "page" : undefined}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {blog ? "▾" : "▸"} blog/
+                </Link>
+                {treePosts.map((post) => (
+                  <Link
+                    key={post.slug}
+                    className="tree-file"
+                    href={postHref(post.slug)}
+                    title={post.title}
+                    aria-current={post.slug === currentSlug ? "page" : undefined}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {post.slug}.md
+                  </Link>
+                ))}
+                {hidden > 0 ? (
+                  <Link className="tree-file tree-more" href="/blog" onClick={() => setMenuOpen(false)}>
+                    … {hidden} more
+                  </Link>
+                ) : null}
+              </>
+            ) : null}
           </nav>
           <p className="side-foot mono">
             Press <kbd>⌘K</kbd> / <kbd>Ctrl K</kbd>
